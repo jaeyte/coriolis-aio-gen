@@ -1,16 +1,17 @@
 /**
- * Coriolis AIO Character Generator — Module entry point.
+ * Coriolis AIO Generator — Module entry point.
  *
- * Registers hooks to add a "Generate Character" button to the Actors sidebar
- * and wires up the generation dialog.
+ * Registers hooks to add "Generate Character" and "Generate Encounter" buttons
+ * to the Actors sidebar and wires up the generation dialogs.
  */
 
 import { openGeneratorDialog } from "./dialog.js";
+import { openEncounterDialog } from "./encounter-dialog.js";
 
 const MODULE_ID = "coriolis-aio-gen";
 
 Hooks.once("init", () => {
-  console.log(`${MODULE_ID} | Initializing Coriolis AIO Character Generator`);
+  console.log(`${MODULE_ID} | Initializing Coriolis AIO Generator`);
 });
 
 Hooks.once("ready", () => {
@@ -26,12 +27,8 @@ Hooks.once("ready", () => {
 });
 
 /**
- * Add the "Generate Character" button to the Actors Directory sidebar header.
+ * Add generator buttons to the Actors Directory sidebar header.
  */
-Hooks.on("getActorDirectoryEntryContext", () => {
-  // Context menu entries if needed in the future
-});
-
 Hooks.on("renderActorDirectory", (app, html) => {
   // Only for GMs and users with actor creation permission
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
@@ -42,18 +39,31 @@ Hooks.on("renderActorDirectory", (app, html) => {
 
   if (!actionsEl) return;
 
-  // Don't add the button twice
+  // Don't add buttons twice
   if (actionsEl.querySelector(".coriolis-aio-generate-btn")) return;
 
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.classList.add("coriolis-aio-generate-btn");
-  btn.innerHTML = `<i class="fas fa-dice-d20"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Generate")}`;
-  btn.addEventListener("click", async (ev) => {
+  // Character generator button
+  const charBtn = document.createElement("button");
+  charBtn.type = "button";
+  charBtn.classList.add("coriolis-aio-generate-btn");
+  charBtn.innerHTML = `<i class="fas fa-dice-d20"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Generate")}`;
+  charBtn.addEventListener("click", async (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
     await openGeneratorDialog();
   });
 
-  actionsEl.appendChild(btn);
+  // Encounter generator button
+  const encBtn = document.createElement("button");
+  encBtn.type = "button";
+  encBtn.classList.add("coriolis-aio-generate-btn", "coriolis-aio-encounter-btn");
+  encBtn.innerHTML = `<i class="fas fa-skull-crossbones"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Encounter")}`;
+  encBtn.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await openEncounterDialog();
+  });
+
+  actionsEl.appendChild(charBtn);
+  actionsEl.appendChild(encBtn);
 });
