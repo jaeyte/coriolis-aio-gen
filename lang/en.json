@@ -1,0 +1,19 @@
+{
+  "CORIOLIS_AIO.Button.Generate": "Generate Character",
+  "CORIOLIS_AIO.Dialog.Title": "Coriolis AIO Character Generator",
+  "CORIOLIS_AIO.Dialog.ActorType": "Actor Type",
+  "CORIOLIS_AIO.Dialog.Character": "Character",
+  "CORIOLIS_AIO.Dialog.NPC": "NPC",
+  "CORIOLIS_AIO.Dialog.Name": "Name",
+  "CORIOLIS_AIO.Dialog.NamePlaceholder": "Leave blank for random name",
+  "CORIOLIS_AIO.Dialog.Concept": "Concept",
+  "CORIOLIS_AIO.Dialog.SubConcept": "Sub-Concept",
+  "CORIOLIS_AIO.Dialog.GroupConcept": "Group Concept",
+  "CORIOLIS_AIO.Dialog.Upbringing": "Upbringing",
+  "CORIOLIS_AIO.Dialog.Origin": "Origin",
+  "CORIOLIS_AIO.Dialog.Icon": "Icon",
+  "CORIOLIS_AIO.Dialog.Random": "— Random —",
+  "CORIOLIS_AIO.Dialog.Generate": "Generate",
+  "CORIOLIS_AIO.Dialog.Cancel": "Cancel",
+  "CORIOLIS_AIO.Error.GenerationFailed": "Character generation failed. Check the console for details."
+}
