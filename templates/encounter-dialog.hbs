@@ -1,39 +1,66 @@
 <form class="coriolis-aio-gen-dialog">
-  <div class="form-group">
-    <label for="aio-encounter-template">{{localize "CORIOLIS_AIO.Encounter.Template"}}</label>
-    <select id="aio-encounter-template" name="templateKey">
-      <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
-      {{#each templates}}
-      <option value="{{@key}}">{{this.label}}</option>
-      {{/each}}
-    </select>
-    <p class="hint" id="aio-encounter-desc"></p>
+  {{!-- Decorative header --}}
+  <div class="coriolis-dialog-header">
+    <div class="coriolis-star-row">
+      <span class="coriolis-star"></span>
+      <span class="coriolis-star"></span>
+      <span class="coriolis-star"></span>
+    </div>
+    <p class="coriolis-dialog-subtitle">Darkness stirs between the stars...</p>
   </div>
 
-  <div class="form-group">
-    <label for="aio-difficulty">{{localize "CORIOLIS_AIO.Encounter.Difficulty"}}</label>
-    <select id="aio-difficulty" name="difficulty">
-      {{#each difficulties}}
-      <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
-      {{/each}}
-    </select>
-  </div>
+  {{!-- Encounter setup --}}
+  <fieldset class="coriolis-section">
+    <legend><i class="fas fa-skull-crossbones"></i> Encounter</legend>
 
-  <div class="form-group">
-    <label for="aio-party-size">{{localize "CORIOLIS_AIO.Encounter.PartySize"}}</label>
-    <input type="number" id="aio-party-size" name="partySize" value="4" min="1" max="10" />
-  </div>
+    <div class="form-group">
+      <label for="aio-encounter-template">{{localize "CORIOLIS_AIO.Encounter.Template"}}</label>
+      <select id="aio-encounter-template" name="templateKey">
+        <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+        {{#each templates}}
+        <option value="{{@key}}">{{this.label}}</option>
+        {{/each}}
+      </select>
+      <p class="hint" id="aio-encounter-desc"></p>
+    </div>
 
-  <div class="form-group">
-    <label for="aio-party-xp">{{localize "CORIOLIS_AIO.Encounter.PartyXP"}}</label>
-    <input type="number" id="aio-party-xp" name="partyXP" value="0" min="0" max="200" />
+    <div class="form-group">
+      <label for="aio-difficulty">{{localize "CORIOLIS_AIO.Encounter.Difficulty"}}</label>
+      <select id="aio-difficulty" name="difficulty">
+        {{#each difficulties}}
+        <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </fieldset>
+
+  {{!-- Party scaling --}}
+  <fieldset class="coriolis-section">
+    <legend><i class="fas fa-users"></i> Party</legend>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="aio-party-size">{{localize "CORIOLIS_AIO.Encounter.PartySize"}}</label>
+        <input type="number" id="aio-party-size" name="partySize" value="4" min="1" max="10" />
+      </div>
+
+      <div class="form-group">
+        <label for="aio-party-xp">{{localize "CORIOLIS_AIO.Encounter.PartyXP"}}</label>
+        <input type="number" id="aio-party-xp" name="partyXP" value="0" min="0" max="200" />
+      </div>
+    </div>
     <p class="hint">{{localize "CORIOLIS_AIO.Encounter.PartyXPHint"}}</p>
-  </div>
+  </fieldset>
 
-  <div class="form-group">
-    <label>
-      <input type="checkbox" name="generateLoot" checked />
-      {{localize "CORIOLIS_AIO.Encounter.GenerateLoot"}}
-    </label>
-  </div>
+  {{!-- Options --}}
+  <fieldset class="coriolis-section">
+    <legend><i class="fas fa-gem"></i> Rewards</legend>
+
+    <div class="form-group">
+      <label class="coriolis-checkbox">
+        <input type="checkbox" name="generateLoot" checked />
+        {{localize "CORIOLIS_AIO.Encounter.GenerateLoot"}}
+      </label>
+    </div>
+  </fieldset>
 </form>

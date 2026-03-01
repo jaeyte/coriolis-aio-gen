@@ -1,8 +1,187 @@
-/* Coriolis AIO Generator — Dialog Styles */
+/* ================================================================
+   Coriolis AIO Generator — Themed Styles
+   Deep-space palette inspired by The Third Horizon.
+   ================================================================ */
+
+/* ---------- palette (custom properties) ---------- */
+:root {
+  --coriolis-void:        #0b0b1a;
+  --coriolis-deep:        #111128;
+  --coriolis-surface:     #191938;
+  --coriolis-border:      #2a2a52;
+  --coriolis-gold:        #d4a84b;
+  --coriolis-gold-dim:    #a07830;
+  --coriolis-gold-glow:   rgba(212, 168, 75, 0.35);
+  --coriolis-teal:        #3ec9c9;
+  --coriolis-teal-dim:    rgba(62, 201, 201, 0.15);
+  --coriolis-text:        #d8d8e8;
+  --coriolis-text-dim:    #8888aa;
+  --coriolis-red:         #c44;
+  --coriolis-red-glow:    rgba(204, 68, 68, 0.3);
+}
+
+/* ================================================================
+   SIDEBAR BUTTONS
+   ================================================================ */
+
+/* Wrapper that keeps both buttons on one row */
+.coriolis-aio-btn-group {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.coriolis-aio-generate-btn {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 8px;
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--coriolis-gold-dim);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #1e1e40 0%, #14142c 100%);
+  color: var(--coriolis-gold);
+  transition: all 0.2s ease;
+  text-shadow: 0 0 6px var(--coriolis-gold-glow);
+}
+
+.coriolis-aio-generate-btn:hover {
+  background: linear-gradient(180deg, #2a2a55 0%, #1a1a38 100%);
+  border-color: var(--coriolis-gold);
+  box-shadow: 0 0 8px var(--coriolis-gold-glow), inset 0 0 12px rgba(212, 168, 75, 0.08);
+  color: #f0d080;
+}
+
+.coriolis-aio-generate-btn i {
+  font-size: 1em;
+}
+
+/* Encounter variant — red-tinted */
+.coriolis-aio-encounter-btn {
+  color: var(--coriolis-red);
+  border-color: #6a2020;
+  text-shadow: 0 0 6px var(--coriolis-red-glow);
+}
+
+.coriolis-aio-encounter-btn:hover {
+  border-color: var(--coriolis-red);
+  box-shadow: 0 0 8px var(--coriolis-red-glow), inset 0 0 12px rgba(204, 68, 68, 0.08);
+  color: #f08080;
+}
+
+/* v13 header-controls / action-buttons compatibility */
+.directory-header .coriolis-aio-btn-group,
+[data-application-part="header"] .coriolis-aio-btn-group,
+.header-controls .coriolis-aio-btn-group,
+.action-buttons .coriolis-aio-btn-group {
+  display: flex;
+}
+
+/* ================================================================
+   DIALOG WINDOW FRAME
+   ================================================================ */
 
 .coriolis-aio-gen-dialog-window {
-  background: var(--color-bg, #1a1a2e);
+  background: var(--coriolis-void);
+  border: 1px solid var(--coriolis-border);
 }
+
+/* Star-field background behind the form content */
+.coriolis-aio-gen-dialog-window .dialog-content,
+.coriolis-aio-gen-dialog-window .window-content {
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 35% 60%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 55% 25%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 72% 80%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1.5px 1.5px at 88% 40%, rgba(212,168,75,0.6), transparent),
+    radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 45% 45%, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1px 1px at 65% 10%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1.5px 1.5px at 8% 70%, rgba(62,201,201,0.5), transparent),
+    var(--coriolis-deep);
+}
+
+/* ================================================================
+   DIALOG HEADER — decorative motif
+   ================================================================ */
+
+.coriolis-dialog-header {
+  text-align: center;
+  padding: 4px 0 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--coriolis-border);
+  position: relative;
+}
+
+/* Row of three decorative stars (Unicode) */
+.coriolis-star-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.coriolis-star {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--coriolis-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--coriolis-gold-glow);
+}
+
+.coriolis-star:nth-child(2) {
+  width: 9px;
+  height: 9px;
+  box-shadow: 0 0 10px var(--coriolis-gold-glow), 0 0 20px rgba(212, 168, 75, 0.15);
+}
+
+.coriolis-dialog-subtitle {
+  margin: 0;
+  font-size: 0.78em;
+  font-style: italic;
+  letter-spacing: 0.5px;
+  color: var(--coriolis-text-dim);
+}
+
+/* ================================================================
+   FIELDSET SECTIONS — grouped form areas
+   ================================================================ */
+
+.coriolis-aio-gen-dialog .coriolis-section {
+  border: 1px solid var(--coriolis-border);
+  border-radius: 4px;
+  padding: 10px 12px 8px;
+  margin: 0 0 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.coriolis-aio-gen-dialog .coriolis-section legend {
+  padding: 0 8px;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--coriolis-gold);
+}
+
+.coriolis-aio-gen-dialog .coriolis-section legend i {
+  margin-right: 5px;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* ================================================================
+   FORM FIELDS
+   ================================================================ */
 
 .coriolis-aio-gen-dialog .form-group {
   display: flex;
@@ -10,83 +189,136 @@
   margin-bottom: 8px;
 }
 
+.coriolis-aio-gen-dialog .form-group:last-child {
+  margin-bottom: 0;
+}
+
 .coriolis-aio-gen-dialog .form-group label {
-  font-weight: bold;
-  margin-bottom: 4px;
-  font-size: 0.9em;
-  color: var(--color-text-dark-primary, #ddd);
+  font-weight: 600;
+  margin-bottom: 3px;
+  font-size: 0.85em;
+  color: var(--coriolis-text);
 }
 
 .coriolis-aio-gen-dialog .form-group select,
 .coriolis-aio-gen-dialog .form-group input[type="text"],
 .coriolis-aio-gen-dialog .form-group input[type="number"] {
-  padding: 4px 6px;
-  border: 1px solid var(--color-border-light-tertiary, #555);
+  padding: 5px 8px;
+  border: 1px solid var(--coriolis-border);
   border-radius: 3px;
-  background: var(--color-bg-option, #222);
-  color: var(--color-text-light-primary, #eee);
-  font-size: 0.9em;
+  background: var(--coriolis-void);
+  color: var(--coriolis-text);
+  font-size: 0.88em;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .coriolis-aio-gen-dialog .form-group select:focus,
 .coriolis-aio-gen-dialog .form-group input[type="text"]:focus,
 .coriolis-aio-gen-dialog .form-group input[type="number"]:focus {
   outline: none;
-  border-color: var(--color-border-highlight, #7b68ee);
-  box-shadow: 0 0 3px var(--color-shadow-highlight, rgba(123, 104, 238, 0.4));
+  border-color: var(--coriolis-gold-dim);
+  box-shadow: 0 0 6px var(--coriolis-gold-glow);
 }
 
-/* Sidebar generate buttons — v12 + v13 compatible */
-.coriolis-aio-generate-btn {
-  flex: 0 0 auto;
-  margin: 2px 4px;
-  padding: 2px 8px;
-  line-height: 24px;
-  font-size: 0.85em;
-  cursor: pointer;
-  border: 1px solid var(--color-border-light-tertiary, #555);
-  border-radius: 3px;
-  background: var(--color-bg-btn, var(--color-bg-option, #333));
-  color: var(--color-text-light-primary, #eee);
-  white-space: nowrap;
-}
-
-.coriolis-aio-generate-btn:hover {
-  background: var(--color-bg-btn-hover, var(--color-border-highlight, #7b68ee));
-  color: #fff;
-}
-
-.coriolis-aio-generate-btn i {
-  margin-right: 4px;
-}
-
-/* Ensure buttons are visible inside v13 header-controls / action-buttons */
-.directory-header .coriolis-aio-generate-btn,
-[data-application-part="header"] .coriolis-aio-generate-btn,
-.header-controls .coriolis-aio-generate-btn,
-.action-buttons .coriolis-aio-generate-btn {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* Encounter description hint */
-.coriolis-aio-gen-dialog .hint {
-  font-size: 0.8em;
+.coriolis-aio-gen-dialog .form-group input::placeholder {
+  color: var(--coriolis-text-dim);
   font-style: italic;
-  color: var(--color-text-dark-secondary, #aaa);
-  margin: 4px 0 0 0;
-  min-height: 1.2em;
 }
 
-/* Number input width */
+/* Side-by-side fields (e.g. party size + XP) */
+.coriolis-aio-gen-dialog .form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.coriolis-aio-gen-dialog .form-row .form-group {
+  flex: 1 1 0;
+}
+
+/* Number input */
 .coriolis-aio-gen-dialog input[type="number"] {
-  width: 80px;
+  width: 100%;
 }
 
-/* Checkbox label inline */
-.coriolis-aio-gen-dialog .form-group label:has(input[type="checkbox"]) {
+/* Checkbox */
+.coriolis-aio-gen-dialog .coriolis-checkbox {
+  display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-weight: normal;
+  cursor: pointer;
+}
+
+.coriolis-aio-gen-dialog .coriolis-checkbox input[type="checkbox"] {
+  accent-color: var(--coriolis-gold);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+/* Hint text */
+.coriolis-aio-gen-dialog .hint {
+  font-size: 0.78em;
+  font-style: italic;
+  color: var(--coriolis-text-dim);
+  margin: 4px 0 0;
+  min-height: 1.1em;
+  line-height: 1.35;
+}
+
+/* ================================================================
+   DIALOG ACTION BUTTONS (Generate / Cancel)
+   ================================================================ */
+
+.coriolis-aio-gen-dialog-window .dialog-buttons {
+  display: flex;
+  gap: 6px;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--coriolis-border);
+}
+
+.coriolis-aio-gen-dialog-window .dialog-buttons button {
+  flex: 1 1 0;
+  padding: 7px 12px;
+  border: 1px solid var(--coriolis-border);
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--coriolis-surface) 0%, var(--coriolis-deep) 100%);
+  color: var(--coriolis-text);
+  font-size: 0.88em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coriolis-aio-gen-dialog-window .dialog-buttons button:hover {
+  border-color: var(--coriolis-gold-dim);
+  background: linear-gradient(180deg, #252550 0%, #1a1a3a 100%);
+  color: var(--coriolis-gold);
+  box-shadow: 0 0 6px var(--coriolis-gold-glow);
+}
+
+.coriolis-aio-gen-dialog-window .dialog-buttons button.default {
+  border-color: var(--coriolis-gold-dim);
+  color: var(--coriolis-gold);
+}
+
+.coriolis-aio-gen-dialog-window .dialog-buttons button.default:hover {
+  border-color: var(--coriolis-gold);
+  box-shadow: 0 0 10px var(--coriolis-gold-glow);
+}
+
+/* ================================================================
+   WINDOW TITLE BAR tint
+   ================================================================ */
+
+.coriolis-aio-gen-dialog-window .window-header {
+  background: linear-gradient(90deg, var(--coriolis-void) 0%, var(--coriolis-deep) 50%, var(--coriolis-void) 100%);
+  border-bottom: 1px solid var(--coriolis-gold-dim);
+  color: var(--coriolis-gold);
+}
+
+.coriolis-aio-gen-dialog-window .window-header .window-title {
+  color: var(--coriolis-gold);
+  text-shadow: 0 0 8px var(--coriolis-gold-glow);
 }
