@@ -1,0 +1,48 @@
+/* Coriolis AIO Generator — Dialog Styles */
+
+.coriolis-aio-gen-dialog-window {
+  background: var(--color-bg, #1a1a2e);
+}
+
+.coriolis-aio-gen-dialog .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.coriolis-aio-gen-dialog .form-group label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 0.9em;
+  color: var(--color-text-dark-primary, #ddd);
+}
+
+.coriolis-aio-gen-dialog .form-group select,
+.coriolis-aio-gen-dialog .form-group input[type="text"] {
+  padding: 4px 6px;
+  border: 1px solid var(--color-border-light-tertiary, #555);
+  border-radius: 3px;
+  background: var(--color-bg-option, #222);
+  color: var(--color-text-light-primary, #eee);
+  font-size: 0.9em;
+}
+
+.coriolis-aio-gen-dialog .form-group select:focus,
+.coriolis-aio-gen-dialog .form-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-border-highlight, #7b68ee);
+  box-shadow: 0 0 3px var(--color-shadow-highlight, rgba(123, 104, 238, 0.4));
+}
+
+/* Sidebar generate button */
+.coriolis-aio-generate-btn {
+  flex: 0 0 auto;
+  margin: 0 4px;
+  line-height: 24px;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.coriolis-aio-generate-btn i {
+  margin-right: 4px;
+}
