@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Extract version from tag
         id: version
@@ -20,7 +22,9 @@ jobs:
 
       - name: Update version in module.json
         run: |
-          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' module.json > module.tmp.json
+          jq --arg v "${{ steps.version.outputs.version }}" \
+            --arg dl "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/coriolis-aio-gen.zip" \
+            '.version = $v | .download = $dl' module.json > module.tmp.json
           mv module.tmp.json module.json
 
       - name: Create module zip
@@ -34,3 +38,11 @@ jobs:
         with:
           files: coriolis-aio-gen.zip
           generate_release_notes: true
+
+      - name: Update module.json on main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add module.json
+          git commit -m "Update module.json for release ${{ github.ref_name }}"
+          git push origin main
