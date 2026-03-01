@@ -1,0 +1,36 @@
+name: Release Module
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Update version in module.json
+        run: |
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' module.json > module.tmp.json
+          mv module.tmp.json module.json
+
+      - name: Create module zip
+        run: |
+          mkdir -p coriolis-aio-gen
+          cp -r module.json scripts templates styles lang README.md coriolis-aio-gen/
+          zip -r coriolis-aio-gen.zip coriolis-aio-gen/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: coriolis-aio-gen.zip
+          generate_release_notes: true
