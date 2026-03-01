@@ -36,17 +36,37 @@
   box-shadow: 0 0 3px var(--color-shadow-highlight, rgba(123, 104, 238, 0.4));
 }
 
-/* Sidebar generate button */
+/* Sidebar generate buttons — v12 + v13 compatible */
 .coriolis-aio-generate-btn {
   flex: 0 0 auto;
-  margin: 0 4px;
+  margin: 2px 4px;
+  padding: 2px 8px;
   line-height: 24px;
   font-size: 0.85em;
   cursor: pointer;
+  border: 1px solid var(--color-border-light-tertiary, #555);
+  border-radius: 3px;
+  background: var(--color-bg-btn, var(--color-bg-option, #333));
+  color: var(--color-text-light-primary, #eee);
+  white-space: nowrap;
+}
+
+.coriolis-aio-generate-btn:hover {
+  background: var(--color-bg-btn-hover, var(--color-border-highlight, #7b68ee));
+  color: #fff;
 }
 
 .coriolis-aio-generate-btn i {
   margin-right: 4px;
+}
+
+/* Ensure buttons are visible inside v13 header-controls / action-buttons */
+.directory-header .coriolis-aio-generate-btn,
+[data-application-part="header"] .coriolis-aio-generate-btn,
+.header-controls .coriolis-aio-generate-btn,
+.action-buttons .coriolis-aio-generate-btn {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Encounter description hint */
