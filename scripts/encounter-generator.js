@@ -7,7 +7,7 @@
  *  - Difficulty scaling based on tier + party XP
  */
 
-import { ENEMIES, ENEMY_WEAPONS, ENEMY_ARMOR, ENEMY_CATEGORIES, DIFFICULTY_TIERS, getXPTier } from "./data/enemies.js";
+import { ENEMIES, ENEMY_WEAPONS, ENEMY_ARMOR, ENEMY_GEAR, ENEMY_CATEGORIES, DIFFICULTY_TIERS, getXPTier } from "./data/enemies.js";
 import { ENCOUNTER_TEMPLATES } from "./data/encounters.js";
 import { LOOT_TABLES, LOOT_TIERS, TIER_ORDER, filterByTier, weightedPick } from "./data/loot.js";
 import { TALENTS } from "./data/talents.js";
@@ -114,6 +114,17 @@ async function createEnemyActor(enemyKey, difficultyTier, xpTier, nameOverride) 
     if (aData) {
       const resolved = await resolveItem({ ...aData });
       embeddedItems.push(resolved);
+    }
+  }
+
+  // Gear
+  if (template.gear) {
+    for (const gKey of template.gear) {
+      const gData = ENEMY_GEAR[gKey];
+      if (gData) {
+        const resolved = await resolveItem({ ...gData });
+        embeddedItems.push(resolved);
+      }
     }
   }
 

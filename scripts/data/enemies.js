@@ -64,6 +64,7 @@ export const ENEMIES = {
     skills: { meleecombat: 2, force: 2, infiltration: 1 },
     weapons: ["knife", "club"],
     armor: null,
+    gear: [],
     talents: [],
     description: "A common street tough, armed and dangerous in numbers."
   },
@@ -75,6 +76,7 @@ export const ENEMIES = {
     skills: { rangedcombat: 3, meleecombat: 2, pilot: 2, infiltration: 1 },
     weapons: ["vulcanPistol", "knife"],
     armor: "lightVest",
+    gear: ["tabak", "lockPicks"],
     talents: ["quickdraw"],
     description: "A spacefaring raider who preys on shipping lanes."
   },
@@ -84,8 +86,9 @@ export const ENEMIES = {
     faction: "criminal",
     attributes: { strength: 4, agility: 5, wits: 4, empathy: 3 },
     skills: { rangedcombat: 4, meleecombat: 3, command: 3, pilot: 3, manipulation: 2 },
-    weapons: ["vulcanPistol", "saber"],
+    weapons: ["thermPistol", "saber", "vulcanPistol"],
     armor: "armorVest",
+    gear: ["communicator", "tabak"],
     talents: ["combatveteran", "ninelives", "quickdraw"],
     description: "A feared pirate lord commanding a crew of cutthroats."
   },
@@ -97,6 +100,7 @@ export const ENEMIES = {
     skills: { rangedcombat: 3, meleecombat: 2, survival: 2, observation: 2 },
     weapons: ["vulcanCarbine", "knife"],
     armor: "armorVest",
+    gear: ["communicator", "medkit"],
     talents: ["combatveteran"],
     description: "A disciplined soldier of the Legion, well-trained and equipped."
   },
@@ -106,8 +110,9 @@ export const ENEMIES = {
     faction: "legion",
     attributes: { strength: 3, agility: 4, wits: 4, empathy: 3 },
     skills: { rangedcombat: 3, command: 3, observation: 2, manipulation: 2, meleecombat: 2 },
-    weapons: ["vulcanPistol", "saber"],
+    weapons: ["thermPistol", "saber"],
     armor: "armorVest",
+    gear: ["communicator", "medkit", "binoculars"],
     talents: ["combatveteran", "quickdraw"],
     description: "A seasoned Legion officer who leads from the front."
   },
@@ -117,8 +122,9 @@ export const ENEMIES = {
     faction: "consortium",
     attributes: { strength: 3, agility: 4, wits: 4, empathy: 3 },
     skills: { rangedcombat: 2, infiltration: 3, manipulation: 3, observation: 2, datadjinn: 2 },
-    weapons: ["vulcanPistol"],
+    weapons: ["vulcanPistol", "knife"],
     armor: "lightVest",
+    gear: ["communicator", "computerTablet"],
     talents: ["camouflage"],
     description: "A covert operative of the Zenithian Hegemony."
   },
@@ -128,8 +134,9 @@ export const ENEMIES = {
     faction: "consortium",
     attributes: { strength: 5, agility: 4, wits: 3, empathy: 2 },
     skills: { rangedcombat: 4, meleecombat: 3, force: 3, observation: 2 },
-    weapons: ["vulcanCarbine", "knife"],
+    weapons: ["vulcanCarbine", "knife", "vulcanPistol"],
     armor: "heavyArmor",
+    gear: ["communicator"],
     talents: ["combatveteran", "tough"],
     description: "A heavily armed enforcer doing the Consortium's dirty work."
   },
@@ -139,8 +146,9 @@ export const ENEMIES = {
     faction: "assassins",
     attributes: { strength: 3, agility: 5, wits: 4, empathy: 2 },
     skills: { meleecombat: 4, infiltration: 4, dexterity: 3, observation: 3 },
-    weapons: ["poisonedBlade", "vulcanPistol"],
+    weapons: ["poisonedBlade", "vulcanCricket"],
     armor: null,
+    gear: ["lockPicks"],
     talents: ["assassinsguild", "catlike"],
     description: "A deadly agent of the Assassin's Guild, striking from shadow."
   },
@@ -150,8 +158,9 @@ export const ENEMIES = {
     faction: "civilian",
     attributes: { strength: 3, agility: 3, wits: 2, empathy: 2 },
     skills: { rangedcombat: 2, meleecombat: 1, observation: 2 },
-    weapons: ["vulcanCricket"],
+    weapons: ["vulcanCricket", "stunBaton"],
     armor: "lightVest",
+    gear: ["communicator"],
     talents: [],
     description: "A standard security guard on a space station."
   },
@@ -163,6 +172,7 @@ export const ENEMIES = {
     skills: { rangedcombat: 3, meleecombat: 2, survival: 2, force: 2 },
     weapons: ["vulcanCarbine", "knife"],
     armor: "lightVest",
+    gear: ["communicator"],
     talents: ["combatveteran"],
     description: "A professional soldier of fortune."
   },
@@ -174,6 +184,7 @@ export const ENEMIES = {
     skills: { rangedcombat: 4, meleecombat: 3, command: 4, survival: 2, observation: 3 },
     weapons: ["vulcanCarbine", "vulcanPistol", "knife"],
     armor: "heavyArmor",
+    gear: ["communicator", "medkit"],
     talents: ["combatveteran", "ninelives", "assault"],
     description: "A battle-hardened leader of a mercenary company."
   },
@@ -185,8 +196,9 @@ export const ENEMIES = {
     faction: "cult",
     attributes: { strength: 2, agility: 2, wits: 3, empathy: 3 },
     skills: { meleecombat: 1, manipulation: 2, mysticpowers: 1 },
-    weapons: ["knife"],
+    weapons: ["ritualDagger", "staff"],
     armor: null,
+    gear: ["prayerBeads"],
     talents: [],
     description: "A fanatical follower of a dark cult."
   },
@@ -196,8 +208,9 @@ export const ENEMIES = {
     faction: "cult",
     attributes: { strength: 2, agility: 3, wits: 5, empathy: 4 },
     skills: { mysticpowers: 4, manipulation: 3, observation: 3, culture: 2 },
-    weapons: ["staff"],
+    weapons: ["staff", "ritualDagger"],
     armor: null,
+    gear: ["prayerBeads", "incense"],
     talents: ["mysticaltelepathy", "mysticalpremonition"],
     description: "A powerful mystic wielding dark powers from beyond the stars."
   },
@@ -207,8 +220,9 @@ export const ENEMIES = {
     faction: "cult",
     attributes: { strength: 3, agility: 3, wits: 5, empathy: 5 },
     skills: { mysticpowers: 5, manipulation: 4, command: 3, culture: 3, observation: 3 },
-    weapons: ["staff", "knife"],
+    weapons: ["staff", "ritualDagger", "vulcanCricket"],
     armor: null,
+    gear: ["prayerBeads", "incense", "communicator"],
     talents: ["mysticaltelepathy", "mysticalclairvoyant", "mysticaltelekinesis"],
     description: "A charismatic and terrifying leader of a forbidden cult."
   },
@@ -255,8 +269,9 @@ export const ENEMIES = {
     faction: "darkbetween",
     attributes: { strength: 4, agility: 4, wits: 3, empathy: 1 },
     skills: { meleecombat: 3, infiltration: 3, force: 2 },
-    weapons: ["shadowTouch"],
+    weapons: ["shadowTouch", "darkBlast"],
     armor: null,
+    gear: [],
     talents: ["catlike"],
     description: "A being touched by the Dark between the Stars, barely human anymore."
   },
@@ -266,8 +281,9 @@ export const ENEMIES = {
     faction: "darkbetween",
     attributes: { strength: 5, agility: 5, wits: 5, empathy: 5 },
     skills: { meleecombat: 5, mysticpowers: 5, manipulation: 4, observation: 4, infiltration: 3 },
-    weapons: ["shadowTouch"],
+    weapons: ["shadowTouch", "darkBlast"],
     armor: null,
+    gear: [],
     talents: ["mysticaltelepathy", "mysticaltelekinesis", "mysticalpremonition"],
     description: "A terrifying entity from the Dark between the Stars. Encountering one may mean the end."
   }
@@ -288,7 +304,11 @@ export const ENEMY_WEAPONS = {
   claws:         { name: "Claws",           type: "weapon", system: { damage: 2, range: "contact", melee: true, weight: "L", techTier: "P", bonus: 1, initiative: 2 } },
   bite:          { name: "Bite",            type: "weapon", system: { damage: 3, range: "contact", melee: true, weight: "N", techTier: "P", bonus: 1, initiative: 1 } },
   crushingJaws:  { name: "Crushing Jaws",   type: "weapon", system: { damage: 5, range: "contact", melee: true, weight: "H", techTier: "P", bonus: 2, initiative: -1 } },
-  shadowTouch:   { name: "Shadow Touch",    type: "weapon", system: { damage: 3, range: "contact", melee: true, weight: "L", techTier: "P", bonus: 2, initiative: 2 } }
+  shadowTouch:   { name: "Shadow Touch",    type: "weapon", system: { damage: 3, range: "contact", melee: true, weight: "L", techTier: "P", bonus: 2, initiative: 2 } },
+  darkBlast:     { name: "Dark Blast",      type: "weapon", system: { damage: 4, range: "short",   melee: false, weight: "L", techTier: "P", bonus: 2, initiative: 1 } },
+  thermPistol:   { name: "Therm Pistol",    type: "weapon", system: { damage: 3, range: "short",   melee: false, weight: "L", techTier: "A", bonus: 2, initiative: 0 } },
+  stunBaton:     { name: "Stun Baton",      type: "weapon", system: { damage: 2, range: "contact", melee: true,  weight: "N", techTier: "O", bonus: 1, initiative: 0 } },
+  ritualDagger:  { name: "Ritual Dagger",   type: "weapon", system: { damage: 2, range: "contact", melee: true,  weight: "L", techTier: "O", bonus: 1, initiative: 1 } }
 };
 
 /**
@@ -304,6 +324,20 @@ export const ENEMY_ARMOR = {
 /**
  * Factions for filtering.
  */
+/**
+ * Enemy personal gear definitions.
+ */
+export const ENEMY_GEAR = {
+  communicator:   { name: "Communicator",    type: "gear", system: { weight: "T", techTier: "O" } },
+  medkit:         { name: "M-Dose",          type: "gear", system: { weight: "L", techTier: "O" } },
+  tabak:          { name: "Tabak",           type: "gear", system: { weight: "T", techTier: "P", quantity: 3 } },
+  lockPicks:      { name: "Lock Picks",      type: "gear", system: { weight: "T", techTier: "O" } },
+  computerTablet: { name: "Computer Tablet", type: "gear", system: { weight: "L", techTier: "O" } },
+  binoculars:     { name: "Binoculars",      type: "gear", system: { weight: "L", techTier: "O" } },
+  prayerBeads:    { name: "Prayer Beads",    type: "gear", system: { weight: "T", techTier: "P" } },
+  incense:        { name: "Ritual Incense",  type: "gear", system: { weight: "T", techTier: "P" } }
+};
+
 export const ENEMY_FACTIONS = {
   criminal:     { label: "Criminals & Pirates" },
   legion:       { label: "The Legion" },
