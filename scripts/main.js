@@ -9,6 +9,7 @@
 
 import { openGeneratorDialog } from "./dialog.js";
 import { openEncounterDialog } from "./encounter-dialog.js";
+import { openShipDialog } from "./ship-dialog.js";
 
 const MODULE_ID = "coriolis-aio-gen";
 const BTN_CLASS = "coriolis-aio-generate-btn";
@@ -28,6 +29,7 @@ Hooks.once("init", () => {
       const actions = (cls.DEFAULT_OPTIONS.actions ??= {});
       actions.coriolisAioGenerate = () => openGeneratorDialog();
       actions.coriolisAioEncounter = () => openEncounterDialog();
+      actions.coriolisAioShip = () => openShipDialog();
       console.log(`${MODULE_ID} | Registered custom actions on ActorDirectory`);
     }
   } catch (e) {
@@ -77,6 +79,11 @@ Hooks.on("getHeaderControlsActorDirectory", (app, controls) => {
       icon: "fa-solid fa-skull-crossbones",
       label: "CORIOLIS_AIO.Button.Encounter",
       action: "coriolisAioEncounter",
+    },
+    {
+      icon: "fa-solid fa-rocket",
+      label: "CORIOLIS_AIO.Button.Ship",
+      action: "coriolisAioShip",
     }
   );
 
@@ -190,6 +197,14 @@ function injectButtons(root) {
       openEncounterDialog
     )
   );
+  group.appendChild(
+    createButton(
+      "fas fa-rocket",
+      "CORIOLIS_AIO.Button.Ship",
+      ["coriolis-aio-ship-btn"],
+      openShipDialog
+    )
+  );
 
   container.appendChild(group);
 
@@ -205,6 +220,7 @@ function bindHeaderControlActions(root) {
   for (const [action, handler] of [
     ["coriolisAioGenerate", openGeneratorDialog],
     ["coriolisAioEncounter", openEncounterDialog],
+    ["coriolisAioShip", openShipDialog],
   ]) {
     const el = root.querySelector(`[data-action='${action}']`);
     if (el && !el.dataset.coriolisAioBound) {

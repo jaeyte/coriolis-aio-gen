@@ -76,6 +76,19 @@
   color: #f08080;
 }
 
+/* Ship variant — teal-tinted */
+.coriolis-aio-ship-btn {
+  color: var(--coriolis-teal);
+  border-color: #1a4a4a;
+  text-shadow: 0 0 6px var(--coriolis-teal-dim);
+}
+
+.coriolis-aio-ship-btn:hover {
+  border-color: var(--coriolis-teal);
+  box-shadow: 0 0 8px var(--coriolis-teal-dim), inset 0 0 12px rgba(62, 201, 201, 0.08);
+  color: #80e8e8;
+}
+
 /* v13 header-controls / action-buttons compatibility */
 .directory-header .coriolis-aio-btn-group,
 [data-application-part="header"] .coriolis-aio-btn-group,
