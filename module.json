@@ -2,7 +2,7 @@
   "id": "coriolis-aio-gen",
   "title": "Coriolis AIO Character Generator",
   "description": "All-in-one character and NPC generator for Coriolis: The Third Horizon. Creates complete, ready-to-play actors with attributes, skills, talents, and gear.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
