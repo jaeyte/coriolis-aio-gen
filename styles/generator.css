@@ -21,23 +21,16 @@
 }
 
 /* ================================================================
-   SIDEBAR BUTTONS
+   SIDEBAR BUTTON
    ================================================================ */
 
-/* Wrapper that keeps both buttons on one row */
-.coriolis-aio-btn-group {
-  display: flex;
-  gap: 4px;
-  width: 100%;
-  margin-top: 4px;
-}
-
 .coriolis-aio-generate-btn {
-  flex: 1 1 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  width: 100%;
+  margin-top: 4px;
   padding: 5px 8px;
   font-size: 0.8em;
   font-weight: 600;
@@ -61,40 +54,6 @@
 
 .coriolis-aio-generate-btn i {
   font-size: 1em;
-}
-
-/* Encounter variant — red-tinted */
-.coriolis-aio-encounter-btn {
-  color: var(--coriolis-red);
-  border-color: #6a2020;
-  text-shadow: 0 0 6px var(--coriolis-red-glow);
-}
-
-.coriolis-aio-encounter-btn:hover {
-  border-color: var(--coriolis-red);
-  box-shadow: 0 0 8px var(--coriolis-red-glow), inset 0 0 12px rgba(204, 68, 68, 0.08);
-  color: #f08080;
-}
-
-/* Ship variant — teal-tinted */
-.coriolis-aio-ship-btn {
-  color: var(--coriolis-teal);
-  border-color: #1a4a4a;
-  text-shadow: 0 0 6px var(--coriolis-teal-dim);
-}
-
-.coriolis-aio-ship-btn:hover {
-  border-color: var(--coriolis-teal);
-  box-shadow: 0 0 8px var(--coriolis-teal-dim), inset 0 0 12px rgba(62, 201, 201, 0.08);
-  color: #80e8e8;
-}
-
-/* v13 header-controls / action-buttons compatibility */
-.directory-header .coriolis-aio-btn-group,
-[data-application-part="header"] .coriolis-aio-btn-group,
-.header-controls .coriolis-aio-btn-group,
-.action-buttons .coriolis-aio-btn-group {
-  display: flex;
 }
 
 /* ================================================================
@@ -163,6 +122,55 @@
   font-style: italic;
   letter-spacing: 0.5px;
   color: var(--coriolis-text-dim);
+}
+
+/* ================================================================
+   GENERATOR TYPE TABS
+   ================================================================ */
+
+.coriolis-gen-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--coriolis-border);
+  padding-bottom: 0;
+}
+
+.coriolis-gen-tab {
+  flex: 1 1 0;
+  padding: 7px 8px;
+  border: 1px solid var(--coriolis-border);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: var(--coriolis-void);
+  color: var(--coriolis-text-dim);
+  font-size: 0.82em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.coriolis-gen-tab:hover {
+  color: var(--coriolis-text);
+  background: var(--coriolis-surface);
+}
+
+.coriolis-gen-tab.active {
+  color: var(--coriolis-gold);
+  background: var(--coriolis-surface);
+  border-color: var(--coriolis-gold-dim);
+  text-shadow: 0 0 6px var(--coriolis-gold-glow);
+}
+
+.coriolis-gen-tab i {
+  margin-right: 4px;
+  font-size: 0.9em;
+}
+
+/* Panel visibility */
+.coriolis-gen-panel.hidden {
+  display: none;
 }
 
 /* ================================================================
