@@ -160,11 +160,12 @@ function createButton(iconClass, labelKey, extraClasses, handler) {
 
 /**
  * Inject the two generator buttons into the given root element unless they
- * are already present.
+ * are already present.  Wraps them in a themed container so they sit
+ * side-by-side with the Coriolis visual treatment.
  */
 function injectButtons(root) {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
-  if (root.querySelector(`.${BTN_CLASS}`)) return; // already injected
+  if (root.querySelector(".coriolis-aio-btn-group")) return; // already injected
 
   const container = findActionsContainer(root);
   if (!container) {
@@ -174,10 +175,14 @@ function injectButtons(root) {
     return;
   }
 
-  container.appendChild(
+  // Wrapper keeps both buttons on one row with themed styling
+  const group = document.createElement("div");
+  group.classList.add("coriolis-aio-btn-group");
+
+  group.appendChild(
     createButton("fas fa-dice-d20", "CORIOLIS_AIO.Button.Generate", [], openGeneratorDialog)
   );
-  container.appendChild(
+  group.appendChild(
     createButton(
       "fas fa-skull-crossbones",
       "CORIOLIS_AIO.Button.Encounter",
@@ -185,6 +190,8 @@ function injectButtons(root) {
       openEncounterDialog
     )
   );
+
+  container.appendChild(group);
 
   console.log(`${MODULE_ID} | Injected generator buttons into sidebar`);
 }
