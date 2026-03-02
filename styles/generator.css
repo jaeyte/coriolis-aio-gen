@@ -212,6 +212,11 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.coriolis-aio-gen-dialog .form-group select option {
+  background: var(--coriolis-deep);
+  color: var(--coriolis-text);
+}
+
 .coriolis-aio-gen-dialog .form-group select:focus,
 .coriolis-aio-gen-dialog .form-group input[type="text"]:focus,
 .coriolis-aio-gen-dialog .form-group input[type="number"]:focus {
