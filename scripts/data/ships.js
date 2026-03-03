@@ -108,6 +108,56 @@ export const SHIP_CLASSES = {
       "ecm", "laboratory", "pointDefense", "miningLaser"
     ]
   }
+  warship: {
+    label: "Warship",
+    description: "A purpose-built military vessel bristling with weapons. The backbone of any fleet.",
+    hullPoints: [8, 12],
+    armor: [5, 8],
+    speed: [2, 4],
+    maneuverability: [1, 3],
+    crewMin: 8,
+    crewMax: 20,
+    moduleSlots: [10, 14],
+    requiredModules: ["bridge", "reactor", "gravitonProjector", "cabins", "turret", "turret"],
+    optionalModulePools: [
+      "torpedoLauncher", "heavyCannon", "pointDefense", "autocannon",
+      "sensorArray", "armorPlating", "ecm", "escapePods",
+      "medlab", "workshop", "hangarBay"
+    ]
+  },
+  luxuryYacht: {
+    label: "Luxury Yacht",
+    description: "An opulent vessel favored by the wealthy elite. Fast, comfortable, and lightly armed.",
+    hullPoints: [4, 6],
+    armor: [1, 3],
+    speed: [3, 5],
+    maneuverability: [2, 4],
+    crewMin: 2,
+    crewMax: 6,
+    moduleSlots: [7, 10],
+    requiredModules: ["bridge", "reactor", "gravitonProjector", "cabins", "cabins"],
+    optionalModulePools: [
+      "turret", "sensorArray", "escapePods", "medlab",
+      "ecm", "dockingClamps", "armorPlating", "hangarBay"
+    ]
+  },
+  colonyShip: {
+    label: "Colony Ship",
+    description: "A massive vessel designed to transport settlers and supplies to new worlds. Slow but self-sufficient.",
+    hullPoints: [10, 16],
+    armor: [3, 5],
+    speed: [1, 2],
+    maneuverability: [0, 1],
+    crewMin: 10,
+    crewMax: 30,
+    moduleSlots: [12, 18],
+    requiredModules: ["bridge", "reactor", "gravitonProjector", "cabins", "cabins", "cargoHold", "cargoHold", "medlab"],
+    optionalModulePools: [
+      "stasisHold", "laboratory", "workshop", "hangarBay",
+      "escapePods", "sensorArray", "turret", "pointDefense",
+      "armorPlating", "dockingClamps", "cargoHold"
+    ]
+  }
 };
 
 // ── Ship Modules ─────────────────────────────────────────────

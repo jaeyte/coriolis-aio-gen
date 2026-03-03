@@ -13,6 +13,8 @@ import {
   MOTIVATIONS,
   QUIRKS
 } from "./data/npcs.js";
+import { ENEMY_WEAPONS, ENEMY_ARMOR, ENEMY_GEAR } from "./data/enemies.js";
+import { resolveItem } from "./compendium-resolver.js";
 import { generateName } from "./data/names.js";
 
 // ── Utility ──────────────────────────────────────────────────
@@ -78,6 +80,43 @@ function buildSkills(archetype) {
   return skills;
 }
 
+/**
+ * Resolve archetype gear into embeddable items.
+ */
+async function resolveArchetypeGear(archetype) {
+  const items = [];
+
+  if (archetype.weapons) {
+    for (const wKey of archetype.weapons) {
+      const wData = ENEMY_WEAPONS[wKey];
+      if (wData) {
+        const resolved = await resolveItem({ ...wData });
+        items.push(resolved);
+      }
+    }
+  }
+
+  if (archetype.armor) {
+    const aData = ENEMY_ARMOR[archetype.armor];
+    if (aData) {
+      const resolved = await resolveItem({ ...aData });
+      items.push(resolved);
+    }
+  }
+
+  if (archetype.gear) {
+    for (const gKey of archetype.gear) {
+      const gData = ENEMY_GEAR[gKey];
+      if (gData) {
+        const resolved = await resolveItem({ ...gData });
+        items.push(resolved);
+      }
+    }
+  }
+
+  return items;
+}
+
 // ── Main NPC Generator ──────────────────────────────────────
 
 /**
@@ -114,6 +153,9 @@ export async function generateQuickNPC(options = {}) {
     const skills = buildSkills(archetype);
     const hpMax = attributes.strength + attributes.agility;
     const mpMax = attributes.wits + attributes.empathy;
+
+    // Resolve archetype gear
+    const embeddedItems = await resolveArchetypeGear(archetype);
 
     const notes = [
       `${archetype.label} — ${archetype.description}`,
@@ -155,7 +197,7 @@ export async function generateQuickNPC(options = {}) {
         movementRate: 10,
         notes
       },
-      items: []
+      items: embeddedItems
     };
 
     const actor = await Actor.implementation.create(actorData);

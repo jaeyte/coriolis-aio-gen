@@ -44,5 +44,11 @@
   "CORIOLIS_AIO.NPC.Faction": "Faction",
   "CORIOLIS_AIO.NPC.CreateActor": "Create as NPC actor",
   "CORIOLIS_AIO.NPC.CreateActorHint": "If unchecked, creates a journal entry with NPC description instead.",
+  "CORIOLIS_AIO.ShipEncounter.Salvage": "Salvage & Boarding",
+  "CORIOLIS_AIO.ShipEncounter.GenerateSalvage": "Generate salvage loot journal",
+  "CORIOLIS_AIO.ShipEncounter.GenerateBoarding": "Generate boarding party encounter",
+  "CORIOLIS_AIO.ShipEncounter.GenerateBoardingHint": "Auto-generates a linked personal combat encounter for boarding actions.",
+  "CORIOLIS_AIO.Encounter.GenerateEnemyShip": "Generate enemy ship encounter",
+  "CORIOLIS_AIO.Encounter.GenerateEnemyShipHint": "Auto-generates a linked ship encounter if the template has one.",
   "CORIOLIS_AIO.Error.GenerationFailed": "Generation failed. Check the console for details."
 }

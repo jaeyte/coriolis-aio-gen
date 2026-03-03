@@ -141,7 +141,8 @@ export const SHIP_ENCOUNTER_TEMPLATES = {
       { shipKey: "pirateSkiff", count: [1, 2] },
       { shipKey: "pirateGunship", count: [1, 1] }
     ],
-    lootBonus: 0.3
+    lootBonus: 0.3,
+    linkedEncounter: "pirateAmbush"
   },
   corsairFleet: {
     label: "Corsair Fleet",
@@ -151,7 +152,8 @@ export const SHIP_ENCOUNTER_TEMPLATES = {
       { shipKey: "pirateGunship", count: [1, 2] },
       { shipKey: "pirateSkiff", count: [0, 2] }
     ],
-    lootBonus: 0.6
+    lootBonus: 0.6,
+    linkedEncounter: "pirateRaid"
   },
   legionIntercept: {
     label: "Legion Intercept",
@@ -184,7 +186,8 @@ export const SHIP_ENCOUNTER_TEMPLATES = {
     enemies: [
       { shipKey: "mercGunboat", count: [2, 3] }
     ],
-    lootBonus: 0.4
+    lootBonus: 0.4,
+    linkedEncounter: "mercenarySquad"
   },
   factionBlockade: {
     label: "Faction Blockade",
@@ -205,6 +208,7 @@ export const SHIP_ENCOUNTER_TEMPLATES = {
   },
   ghostShip: {
     label: "Ghost Ship",
+    linkedEncounter: "darkboundAttack",
     description: "A darkbound hulk drifts into scanner range, radiating cold and wrongness. Something stirs aboard.",
     enemies: [
       { shipKey: "darkboundHulk", count: [1, 1] }

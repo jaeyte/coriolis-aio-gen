@@ -126,14 +126,35 @@ function _generateCharacterFromForm(form) {
   });
 }
 
-function _generateEncounterFromForm(form) {
-  return generateEncounter({
-    templateKey: form.templateKey.value || undefined,
-    difficulty: form.difficulty.value,
-    partySize: parseInt(form.partySize.value) || 4,
-    partyXP: parseInt(form.partyXP.value) || 0,
+async function _generateEncounterFromForm(form) {
+  const templateKey = form.templateKey.value || undefined;
+  const difficulty = form.difficulty.value;
+  const partySize = parseInt(form.partySize.value) || 4;
+  const partyXP = parseInt(form.partyXP.value) || 0;
+
+  const result = await generateEncounter({
+    templateKey,
+    difficulty,
+    partySize,
+    partyXP,
     generateLoot: form.generateLoot.checked
   });
+
+  // Optionally generate the linked enemy ship
+  if (form.generateEnemyShip.checked && templateKey) {
+    const template = ENCOUNTER_TEMPLATES[templateKey];
+    if (template?.linkedShipEncounter) {
+      await generateShipEncounter({
+        templateKey: template.linkedShipEncounter,
+        difficulty,
+        partySize,
+        partyXP,
+        generateSalvage: true
+      });
+    }
+  }
+
+  return result;
 }
 
 function _generateShipFromForm(form) {
@@ -144,13 +165,35 @@ function _generateShipFromForm(form) {
   });
 }
 
-function _generateShipEncounterFromForm(form) {
-  return generateShipEncounter({
-    templateKey: form.shipEncounterTemplate.value || undefined,
-    difficulty: form.shipEncounterDifficulty.value,
-    partySize: parseInt(form.shipEncounterPartySize.value) || 4,
-    partyXP: parseInt(form.shipEncounterPartyXP.value) || 0
+async function _generateShipEncounterFromForm(form) {
+  const templateKey = form.shipEncounterTemplate.value || undefined;
+  const difficulty = form.shipEncounterDifficulty.value;
+  const partySize = parseInt(form.shipEncounterPartySize.value) || 4;
+  const partyXP = parseInt(form.shipEncounterPartyXP.value) || 0;
+
+  const result = await generateShipEncounter({
+    templateKey,
+    difficulty,
+    partySize,
+    partyXP,
+    generateSalvage: form.generateSalvage.checked
   });
+
+  // Optionally generate the linked boarding party encounter
+  if (form.generateBoardingParty.checked && templateKey) {
+    const template = SHIP_ENCOUNTER_TEMPLATES[templateKey];
+    if (template?.linkedEncounter) {
+      await generateEncounter({
+        templateKey: template.linkedEncounter,
+        difficulty,
+        partySize,
+        partyXP,
+        generateLoot: true
+      });
+    }
+  }
+
+  return result;
 }
 
 function _generatePartyFromForm(form) {

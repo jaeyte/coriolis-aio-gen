@@ -12,61 +12,84 @@ export const NPC_ARCHETYPES = {
     label: "Merchant",
     keyAttribute: "empathy",
     keySkills: ["manipulation", "culture", "observation"],
-    description: "A trader hawking wares in a bazaar or negotiating bulk contracts."
+    description: "A trader hawking wares in a bazaar or negotiating bulk contracts.",
+    weapons: ["vulcanCricket"],
+    gear: ["communicator", "computerTablet"]
   },
   informant: {
     label: "Informant",
     keyAttribute: "wits",
     keySkills: ["infiltration", "observation", "manipulation"],
-    description: "Someone with ears everywhere and information for sale."
+    description: "Someone with ears everywhere and information for sale.",
+    weapons: ["vulcanCricket", "knife"],
+    gear: ["communicator", "lockPicks"]
   },
   bureaucrat: {
     label: "Bureaucrat",
     keyAttribute: "empathy",
     keySkills: ["manipulation", "culture", "command"],
-    description: "A functionary who controls access to permits, docking rights, or restricted zones."
+    description: "A functionary who controls access to permits, docking rights, or restricted zones.",
+    weapons: [],
+    gear: ["communicator", "computerTablet"]
   },
   crimeBoss: {
     label: "Crime Boss",
     keyAttribute: "empathy",
     keySkills: ["command", "manipulation", "rangedcombat"],
-    description: "A shadowy figure who runs the local underworld with charm and violence."
+    description: "A shadowy figure who runs the local underworld with charm and violence.",
+    weapons: ["vulcanPistol", "knife"],
+    armor: "lightVest",
+    gear: ["communicator", "tabak"]
   },
   mystic: {
     label: "Mystic",
     keyAttribute: "wits",
     keySkills: ["mysticpowers", "observation", "culture"],
-    description: "A seer, healer, or hermit touched by the Icons — or something darker."
+    description: "A seer, healer, or hermit touched by the Icons — or something darker.",
+    weapons: ["staff"],
+    gear: ["prayerBeads", "incense"]
   },
   scholar: {
     label: "Scholar",
     keyAttribute: "wits",
     keySkills: ["science", "culture", "datadjinn"],
-    description: "An academic researching ancient texts, xenobiology, or portal mechanics."
+    description: "An academic researching ancient texts, xenobiology, or portal mechanics.",
+    weapons: [],
+    gear: ["communicator", "computerTablet"]
   },
   factionLeader: {
     label: "Faction Leader",
     keyAttribute: "empathy",
     keySkills: ["command", "manipulation", "observation"],
-    description: "A charismatic or ruthless figure at the head of a local faction cell."
+    description: "A charismatic or ruthless figure at the head of a local faction cell.",
+    weapons: ["vulcanPistol", "knife"],
+    armor: "lightVest",
+    gear: ["communicator"]
   },
   technician: {
     label: "Technician",
     keyAttribute: "wits",
     keySkills: ["technology", "science", "dexterity"],
-    description: "A skilled mechanic, engineer, or shipwright who can fix or build anything."
+    description: "A skilled mechanic, engineer, or shipwright who can fix or build anything.",
+    weapons: ["knife"],
+    gear: ["communicator", "medkit"]
   },
   smuggler: {
     label: "Smuggler",
     keyAttribute: "agility",
     keySkills: ["pilot", "infiltration", "manipulation"],
-    description: "A daring courier who moves contraband past customs and blockades."
+    description: "A daring courier who moves contraband past customs and blockades.",
+    weapons: ["vulcanPistol", "knife"],
+    armor: "lightVest",
+    gear: ["communicator", "lockPicks"]
   },
   pilgrim: {
     label: "Pilgrim",
     keyAttribute: "empathy",
     keySkills: ["culture", "survival", "medicurgy"],
-    description: "A devout traveler on a sacred journey across the Third Horizon."
+    description: "A devout traveler on a sacred journey across the Third Horizon.",
+    weapons: ["staff"],
+    gear: ["prayerBeads", "medkit"]
   }
 };
 

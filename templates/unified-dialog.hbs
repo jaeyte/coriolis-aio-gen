@@ -177,6 +177,14 @@
           {{localize "CORIOLIS_AIO.Encounter.GenerateLoot"}}
         </label>
       </div>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="generateEnemyShip" />
+          {{localize "CORIOLIS_AIO.Encounter.GenerateEnemyShip"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.Encounter.GenerateEnemyShipHint"}}</p>
+      </div>
     </fieldset>
   </div>
 
@@ -262,6 +270,25 @@
         </div>
       </div>
       <p class="hint">{{localize "CORIOLIS_AIO.Encounter.PartyXPHint"}}</p>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-gem"></i> {{localize "CORIOLIS_AIO.ShipEncounter.Salvage"}}</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="generateSalvage" checked />
+          {{localize "CORIOLIS_AIO.ShipEncounter.GenerateSalvage"}}
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="generateBoardingParty" />
+          {{localize "CORIOLIS_AIO.ShipEncounter.GenerateBoarding"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.ShipEncounter.GenerateBoardingHint"}}</p>
+      </div>
     </fieldset>
   </div>
 
