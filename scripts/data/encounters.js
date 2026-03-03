@@ -25,7 +25,8 @@ export const ENCOUNTER_TEMPLATES = {
       { enemyKey: "pirate", count: [2, 4] },
       { enemyKey: "thug", count: [1, 3] }
     ],
-    lootBonus: 0.3
+    lootBonus: 0.3,
+    linkedShipEncounter: "pirateAmbush"
   },
 
   pirateRaid: {
@@ -37,7 +38,8 @@ export const ENCOUNTER_TEMPLATES = {
       { enemyKey: "pirate", count: [3, 5] },
       { enemyKey: "thug", count: [2, 4] }
     ],
-    lootBonus: 0.5
+    lootBonus: 0.5,
+    linkedShipEncounter: "corsairFleet"
   },
 
   legionCheckpoint: {

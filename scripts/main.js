@@ -1,14 +1,14 @@
 /**
  * Coriolis AIO Generator — Module entry point.
  *
- * Registers hooks to add "Generate Character" and "Generate Encounter" buttons
- * to the Actors sidebar and wires up the generation dialogs.
+ * Registers hooks to add a single "AIO Generator" button to the Actors
+ * sidebar that opens a unified dialog for character, encounter, and ship
+ * generation.
  *
  * Supports both Foundry v12 (Application / jQuery) and v13+ (ApplicationV2 / HTMLElement).
  */
 
-import { openGeneratorDialog } from "./dialog.js";
-import { openEncounterDialog } from "./encounter-dialog.js";
+import { openUnifiedDialog } from "./unified-dialog.js";
 
 const MODULE_ID = "coriolis-aio-gen";
 const BTN_CLASS = "coriolis-aio-generate-btn";
@@ -18,7 +18,7 @@ const BTN_CLASS = "coriolis-aio-generate-btn";
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Coriolis AIO Generator`);
 
-  // v13: register our custom actions on the ActorDirectory class so that
+  // v13: register our custom action on the ActorDirectory class so that
   // header controls added via getHeaderControlsActorDirectory actually work.
   try {
     const cls =
@@ -26,9 +26,8 @@ Hooks.once("init", () => {
       globalThis.foundry?.applications?.sidebar?.tabs?.ActorDirectory;
     if (cls?.DEFAULT_OPTIONS) {
       const actions = (cls.DEFAULT_OPTIONS.actions ??= {});
-      actions.coriolisAioGenerate = () => openGeneratorDialog();
-      actions.coriolisAioEncounter = () => openEncounterDialog();
-      console.log(`${MODULE_ID} | Registered custom actions on ActorDirectory`);
+      actions.coriolisAioGenerate = () => openUnifiedDialog();
+      console.log(`${MODULE_ID} | Registered custom action on ActorDirectory`);
     }
   } catch (e) {
     // Not critical — DOM injection will still work as a fallback.
@@ -57,7 +56,7 @@ Hooks.once("ready", () => {
         dir?.element instanceof HTMLElement
           ? dir.element
           : dir?.element?.[0] ?? dir?.element?.get?.(0);
-      if (root) injectButtons(root);
+      if (root) injectButton(root);
     } catch { /* ignored */ }
   }, 500);
 });
@@ -67,20 +66,13 @@ Hooks.once("ready", () => {
 Hooks.on("getHeaderControlsActorDirectory", (app, controls) => {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
 
-  controls.push(
-    {
-      icon: "fa-solid fa-dice-d20",
-      label: "CORIOLIS_AIO.Button.Generate",
-      action: "coriolisAioGenerate",
-    },
-    {
-      icon: "fa-solid fa-skull-crossbones",
-      label: "CORIOLIS_AIO.Button.Encounter",
-      action: "coriolisAioEncounter",
-    }
-  );
+  controls.push({
+    icon: "fa-solid fa-dice-d20",
+    label: "CORIOLIS_AIO.Button.Generate",
+    action: "coriolisAioGenerate",
+  });
 
-  console.log(`${MODULE_ID} | Added header controls via getHeaderControlsActorDirectory`);
+  console.log(`${MODULE_ID} | Added header control via getHeaderControlsActorDirectory`);
 });
 
 /* ---------- DOM injection (cross-version) ---------- */
@@ -97,7 +89,7 @@ function resolveRoot(html) {
 }
 
 /**
- * Find the best container element in the sidebar header to append our buttons.
+ * Find the best container element in the sidebar header to append our button.
  * Tries a broad set of selectors for cross-version compatibility.
  */
 function findActionsContainer(root) {
@@ -143,78 +135,49 @@ function findActionsContainer(root) {
 }
 
 /**
- * Create a styled generator button.
+ * Inject the AIO Generator button into the given root element unless it is
+ * already present.
  */
-function createButton(iconClass, labelKey, extraClasses, handler) {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.classList.add(BTN_CLASS, ...extraClasses);
-  btn.innerHTML = `<i class="${iconClass}"></i> ${game.i18n.localize(labelKey)}`;
-  btn.addEventListener("click", async (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    await handler();
-  });
-  return btn;
-}
-
-/**
- * Inject the two generator buttons into the given root element unless they
- * are already present.  Wraps them in a themed container so they sit
- * side-by-side with the Coriolis visual treatment.
- */
-function injectButtons(root) {
+function injectButton(root) {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
-  if (root.querySelector(".coriolis-aio-btn-group")) return; // already injected
+  if (root.querySelector(`.${BTN_CLASS}`)) return; // already injected
 
   const container = findActionsContainer(root);
   if (!container) {
     console.warn(
-      `${MODULE_ID} | Could not find sidebar actions container to inject buttons.`
+      `${MODULE_ID} | Could not find sidebar actions container to inject button.`
     );
     return;
   }
 
-  // Wrapper keeps both buttons on one row with themed styling
-  const group = document.createElement("div");
-  group.classList.add("coriolis-aio-btn-group");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.classList.add(BTN_CLASS);
+  btn.innerHTML = `<i class="fas fa-dice-d20"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Generate")}`;
+  btn.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await openUnifiedDialog();
+  });
 
-  group.appendChild(
-    createButton("fas fa-dice-d20", "CORIOLIS_AIO.Button.Generate", [], openGeneratorDialog)
-  );
-  group.appendChild(
-    createButton(
-      "fas fa-skull-crossbones",
-      "CORIOLIS_AIO.Button.Encounter",
-      ["coriolis-aio-encounter-btn"],
-      openEncounterDialog
-    )
-  );
+  container.appendChild(btn);
 
-  container.appendChild(group);
-
-  console.log(`${MODULE_ID} | Injected generator buttons into sidebar`);
+  console.log(`${MODULE_ID} | Injected AIO Generator button into sidebar`);
 }
 
 /**
- * Bind click listeners to any header-controls buttons that were added via
- * the getHeaderControls hook but whose actions may not have been registered
- * early enough.
+ * Bind click listener to header-controls button added via the
+ * getHeaderControls hook whose action may not have been registered early enough.
  */
 function bindHeaderControlActions(root) {
-  for (const [action, handler] of [
-    ["coriolisAioGenerate", openGeneratorDialog],
-    ["coriolisAioEncounter", openEncounterDialog],
-  ]) {
-    const el = root.querySelector(`[data-action='${action}']`);
-    if (el && !el.dataset.coriolisAioBound) {
-      el.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        handler();
-      });
-      el.dataset.coriolisAioBound = "1";
-    }
+  const el = root.querySelector("[data-action='coriolisAioGenerate']");
+  if (el && !el.dataset.coriolisAioBound) {
+    el.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      openUnifiedDialog();
+    });
+    el.dataset.coriolisAioBound = "1";
   }
 }
 
@@ -227,7 +190,7 @@ Hooks.on("renderActorDirectory", (app, html) => {
     console.warn(`${MODULE_ID} | renderActorDirectory: could not resolve root element`);
     return;
   }
-  injectButtons(root);
+  injectButton(root);
   bindHeaderControlActions(root);
 });
 
@@ -235,7 +198,7 @@ Hooks.on("renderActorDirectory", (app, html) => {
 Hooks.on("changeSidebarTab", (app) => {
   if (app?.id !== "actors" && app?.tabName !== "actors" && app?.constructor?.name !== "ActorDirectory") return;
   const root = resolveRoot(app.element ?? app._element);
-  if (root) injectButtons(root);
+  if (root) injectButton(root);
 });
 
 // v13 fallback: fires when the entire sidebar renders.
@@ -247,5 +210,5 @@ Hooks.on("renderSidebar", (_app, html) => {
     root.querySelector("#actors") ??
     root.querySelector("[data-tab='actors']") ??
     root.querySelector("[data-tab-group] [data-tab='actors']");
-  if (actorsPanel) injectButtons(actorsPanel);
+  if (actorsPanel) injectButton(actorsPanel);
 });

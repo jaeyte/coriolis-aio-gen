@@ -1,0 +1,235 @@
+/**
+ * Quick NPC generator for Coriolis: The Third Horizon.
+ *
+ * Generates a narrative NPC with personality, motivation, quirk, and faction.
+ * Can output either a journal entry (description only) or a full NPC actor
+ * with simplified attributes and skills based on the archetype.
+ */
+
+import {
+  NPC_ARCHETYPES,
+  NPC_FACTIONS,
+  PERSONALITY_TRAITS,
+  MOTIVATIONS,
+  QUIRKS
+} from "./data/npcs.js";
+import { ENEMY_WEAPONS, ENEMY_ARMOR, ENEMY_GEAR } from "./data/enemies.js";
+import { resolveItem } from "./compendium-resolver.js";
+import { generateName } from "./data/names.js";
+
+// ── Utility ──────────────────────────────────────────────────
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function pickKey(obj) {
+  const keys = Object.keys(obj);
+  return keys[Math.floor(Math.random() * keys.length)];
+}
+
+function pickMultiple(arr, count) {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, count);
+}
+
+function randRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// ── NPC Profile Assembly ────────────────────────────────────
+
+const ALL_ATTRIBUTES = ["strength", "agility", "wits", "empathy"];
+
+const ALL_SKILLS = [
+  "dexterity", "force", "infiltration", "manipulation",
+  "meleecombat", "observation", "rangedcombat", "survival",
+  "command", "culture", "datadjinn", "medicurgy",
+  "mysticpowers", "pilot", "science", "technology"
+];
+
+/**
+ * Build simplified attributes for an NPC based on archetype.
+ * Key attribute gets 4, others get 2-3.
+ */
+function buildAttributes(archetype) {
+  const attrs = {};
+  for (const attr of ALL_ATTRIBUTES) {
+    attrs[attr] = attr === archetype.keyAttribute ? 4 : randRange(2, 3);
+  }
+  return attrs;
+}
+
+/**
+ * Build simplified skills for an NPC based on archetype.
+ * Key skills get 2-3, everything else 0.
+ */
+function buildSkills(archetype) {
+  const skills = {};
+  for (const skill of ALL_SKILLS) {
+    if (archetype.keySkills.includes(skill)) {
+      skills[skill] = { value: randRange(2, 3) };
+    } else {
+      skills[skill] = { value: 0 };
+    }
+  }
+  return skills;
+}
+
+/**
+ * Resolve archetype gear into embeddable items.
+ */
+async function resolveArchetypeGear(archetype) {
+  const items = [];
+
+  if (archetype.weapons) {
+    for (const wKey of archetype.weapons) {
+      const wData = ENEMY_WEAPONS[wKey];
+      if (wData) {
+        const resolved = await resolveItem({ ...wData });
+        items.push(resolved);
+      }
+    }
+  }
+
+  if (archetype.armor) {
+    const aData = ENEMY_ARMOR[archetype.armor];
+    if (aData) {
+      const resolved = await resolveItem({ ...aData });
+      items.push(resolved);
+    }
+  }
+
+  if (archetype.gear) {
+    for (const gKey of archetype.gear) {
+      const gData = ENEMY_GEAR[gKey];
+      if (gData) {
+        const resolved = await resolveItem({ ...gData });
+        items.push(resolved);
+      }
+    }
+  }
+
+  return items;
+}
+
+// ── Main NPC Generator ──────────────────────────────────────
+
+/**
+ * Generate a quick NPC.
+ *
+ * @param {object} options
+ * @param {string} [options.archetypeKey] - Archetype key, or random
+ * @param {string} [options.factionKey] - Faction key, or random
+ * @param {string} [options.name] - Name, or auto-generated
+ * @param {boolean} [options.createActor=false] - If true, create NPC actor; else journal entry
+ * @returns {Promise<{actor: Actor|null, journal: JournalEntry|null, summary: string}>}
+ */
+export async function generateQuickNPC(options = {}) {
+  const archetypeKey = options.archetypeKey || pickKey(NPC_ARCHETYPES);
+  const archetype = NPC_ARCHETYPES[archetypeKey];
+  if (!archetype) {
+    ui.notifications.error("Unknown NPC archetype.");
+    return { actor: null, journal: null, summary: "Error: unknown archetype" };
+  }
+
+  const factionKey = options.factionKey || pickKey(NPC_FACTIONS);
+  const faction = NPC_FACTIONS[factionKey];
+
+  const npcName = options.name || generateName();
+  const traits = pickMultiple(PERSONALITY_TRAITS, randRange(2, 3));
+  const motivation = pick(MOTIVATIONS);
+  const quirk = pick(QUIRKS);
+
+  const createActor = options.createActor ?? false;
+
+  if (createActor) {
+    // Build a full NPC actor
+    const attributes = buildAttributes(archetype);
+    const skills = buildSkills(archetype);
+    const hpMax = attributes.strength + attributes.agility;
+    const mpMax = attributes.wits + attributes.empathy;
+
+    // Resolve archetype gear
+    const embeddedItems = await resolveArchetypeGear(archetype);
+
+    const notes = [
+      `${archetype.label} — ${archetype.description}`,
+      `\nFaction: ${faction.label}`,
+      `\nPersonality: ${traits.join("; ")}`,
+      `\nMotivation: ${motivation}`,
+      `\nQuirk: ${quirk}`,
+      "\n\nGenerated by Coriolis AIO Generator."
+    ].join("");
+
+    const actorData = {
+      name: npcName,
+      type: "npc",
+      system: {
+        bio: {
+          origin: "",
+          upbringing: "",
+          humanite: false,
+          concept: archetype.label,
+          icon: "",
+          groupConcept: faction.label,
+          personalProblem: motivation,
+          appearance: { face: "", clothing: "" },
+          crewPosition: { position: "", shipId: "" }
+        },
+        attributes: {
+          strength: { value: attributes.strength },
+          agility: { value: attributes.agility },
+          wits: { value: attributes.wits },
+          empathy: { value: attributes.empathy }
+        },
+        skills,
+        hitPoints: { value: hpMax },
+        mindPoints: { value: mpMax },
+        experience: { value: 0 },
+        radiation: { value: 0 },
+        reputation: { value: randRange(0, 3) },
+        birr: randRange(10, 200),
+        movementRate: 10,
+        notes
+      },
+      items: embeddedItems
+    };
+
+    const actor = await Actor.implementation.create(actorData);
+    const summary = `${archetype.label} "${npcName}" — ${faction.label}`;
+    ui.notifications.info(`NPC generated: ${npcName} (${archetype.label})`);
+    return { actor, journal: null, summary };
+
+  } else {
+    // Build a journal entry
+    let html = `<h2>${npcName}</h2>`;
+    html += `<p><strong>Role:</strong> ${archetype.label} — ${archetype.description}</p>`;
+    html += `<p><strong>Faction:</strong> ${faction.label}</p>`;
+    html += `<h3>Personality</h3><ul>`;
+    for (const trait of traits) {
+      html += `<li>${trait}</li>`;
+    }
+    html += `</ul>`;
+    html += `<p><strong>Motivation:</strong> ${motivation}</p>`;
+    html += `<p><strong>Quirk:</strong> ${quirk}</p>`;
+    html += `<hr><p><em>Generated by Coriolis AIO Generator</em></p>`;
+
+    const journal = await JournalEntry.implementation.create({
+      name: `NPC: ${npcName}`,
+      pages: [{
+        name: npcName,
+        type: "text",
+        text: { content: html, format: 1 }
+      }]
+    });
+
+    const summary = `${archetype.label} "${npcName}" — ${faction.label} (Journal)`;
+    ui.notifications.info(`NPC generated: ${npcName} (${archetype.label})`);
+    return { actor: null, journal, summary };
+  }
+}
