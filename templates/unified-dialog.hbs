@@ -23,6 +23,15 @@
     <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'ship')}}active{{/if}}" data-tab="ship">
       <i class="fas fa-rocket"></i> {{localize "CORIOLIS_AIO.Tab.Ship"}}
     </button>
+    <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'shipEncounter')}}active{{/if}}" data-tab="shipEncounter">
+      <i class="fas fa-crosshairs"></i> {{localize "CORIOLIS_AIO.Tab.ShipEncounter"}}
+    </button>
+    <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'party')}}active{{/if}}" data-tab="party">
+      <i class="fas fa-users"></i> {{localize "CORIOLIS_AIO.Tab.Party"}}
+    </button>
+    <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'npc')}}active{{/if}}" data-tab="npc">
+      <i class="fas fa-user-secret"></i> {{localize "CORIOLIS_AIO.Tab.NPC"}}
+    </button>
   </div>
 
   {{!-- ═══════════════════════════════════════════════
@@ -205,6 +214,137 @@
           {{localize "CORIOLIS_AIO.Ship.IncludeProblem"}}
         </label>
         <p class="hint">{{localize "CORIOLIS_AIO.Ship.IncludeProblemHint"}}</p>
+      </div>
+    </fieldset>
+  </div>
+
+  {{!-- ═══════════════════════════════════════════════
+       SHIP ENCOUNTER PANEL
+       ═══════════════════════════════════════════════ --}}
+  <div class="coriolis-gen-panel {{#unless (eq initialTab 'shipEncounter')}}hidden{{/unless}}" data-panel="shipEncounter">
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-crosshairs"></i> {{localize "CORIOLIS_AIO.ShipEncounter.Title"}}</legend>
+
+      <div class="form-group">
+        <label for="aio-ship-encounter-template">{{localize "CORIOLIS_AIO.ShipEncounter.Template"}}</label>
+        <select id="aio-ship-encounter-template" name="shipEncounterTemplate">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each shipEncounterTemplates}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+        <p class="hint" id="aio-ship-encounter-desc"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="aio-ship-encounter-difficulty">{{localize "CORIOLIS_AIO.ShipEncounter.Difficulty"}}</label>
+        <select id="aio-ship-encounter-difficulty" name="shipEncounterDifficulty">
+          {{#each difficulties}}
+          <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-users"></i> Party</legend>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="aio-ship-encounter-party-size">{{localize "CORIOLIS_AIO.Encounter.PartySize"}}</label>
+          <input type="number" id="aio-ship-encounter-party-size" name="shipEncounterPartySize" value="4" min="1" max="10" />
+        </div>
+
+        <div class="form-group">
+          <label for="aio-ship-encounter-party-xp">{{localize "CORIOLIS_AIO.Encounter.PartyXP"}}</label>
+          <input type="number" id="aio-ship-encounter-party-xp" name="shipEncounterPartyXP" value="0" min="0" max="200" />
+        </div>
+      </div>
+      <p class="hint">{{localize "CORIOLIS_AIO.Encounter.PartyXPHint"}}</p>
+    </fieldset>
+  </div>
+
+  {{!-- ═══════════════════════════════════════════════
+       PARTY PANEL
+       ═══════════════════════════════════════════════ --}}
+  <div class="coriolis-gen-panel {{#unless (eq initialTab 'party')}}hidden{{/unless}}" data-panel="party">
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-users"></i> {{localize "CORIOLIS_AIO.Party.Title"}}</legend>
+
+      <div class="form-group">
+        <label for="aio-party-gen-size">{{localize "CORIOLIS_AIO.Party.Size"}}</label>
+        <input type="number" id="aio-party-gen-size" name="partyGenSize" value="4" min="3" max="6" />
+      </div>
+
+      <div class="form-group">
+        <label for="aio-party-group-concept">{{localize "CORIOLIS_AIO.Dialog.GroupConcept"}}</label>
+        <select id="aio-party-group-concept" name="partyGroupConceptKey">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each groupConcepts}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-cog"></i> Options</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="allowDuplicates" />
+          {{localize "CORIOLIS_AIO.Party.AllowDuplicates"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.Party.AllowDuplicatesHint"}}</p>
+      </div>
+    </fieldset>
+  </div>
+
+  {{!-- ═══════════════════════════════════════════════
+       NPC PANEL
+       ═══════════════════════════════════════════════ --}}
+  <div class="coriolis-gen-panel {{#unless (eq initialTab 'npc')}}hidden{{/unless}}" data-panel="npc">
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-user-secret"></i> {{localize "CORIOLIS_AIO.NPC.Title"}}</legend>
+
+      <div class="form-group">
+        <label for="aio-npc-archetype">{{localize "CORIOLIS_AIO.NPC.Archetype"}}</label>
+        <select id="aio-npc-archetype" name="npcArchetype">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each npcArchetypes}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="aio-npc-faction">{{localize "CORIOLIS_AIO.NPC.Faction"}}</label>
+        <select id="aio-npc-faction" name="npcFaction">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each npcFactions}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="aio-npc-name">{{localize "CORIOLIS_AIO.Dialog.Name"}}</label>
+        <input type="text" id="aio-npc-name" name="npcName" placeholder="{{localize "CORIOLIS_AIO.Dialog.NamePlaceholder"}}" />
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-cog"></i> Output</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="npcCreateActor" />
+          {{localize "CORIOLIS_AIO.NPC.CreateActor"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.NPC.CreateActorHint"}}</p>
       </div>
     </fieldset>
   </div>

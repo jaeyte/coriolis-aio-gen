@@ -50,7 +50,7 @@ function shuffle(arr) {
  * Generate a ship name from component parts.
  * @returns {string}
  */
-function generateShipName() {
+export function generateShipName() {
   const prefix = pick(SHIP_NAMES_PREFIX);
   const first = pick(SHIP_NAMES_FIRST);
   const second = pick(SHIP_NAMES_SECOND);
@@ -67,7 +67,7 @@ function generateShipName() {
  * @param {object} shipClass - Ship class definition
  * @returns {string[]} Array of module keys
  */
-function selectModules(shipClass) {
+export function selectModules(shipClass) {
   const totalSlots = randRange(shipClass.moduleSlots[0], shipClass.moduleSlots[1]);
   const modules = [...shipClass.requiredModules];
 
@@ -91,7 +91,7 @@ function selectModules(shipClass) {
  * @param {object} shipClass - Ship class definition
  * @returns {object[]} Array of { key, label }
  */
-function generateCrew(shipClass) {
+export function generateCrew(shipClass) {
   const crewSize = randRange(shipClass.crewMin, shipClass.crewMax);
   const crew = [];
 
@@ -126,7 +126,7 @@ function generateCrew(shipClass) {
  * @param {object} shipClass - Ship class definition
  * @returns {object} { hullPoints, armor, speed, maneuverability }
  */
-function rollStats(shipClass) {
+export function rollStats(shipClass) {
   return {
     hullPoints: randRange(shipClass.hullPoints[0], shipClass.hullPoints[1]),
     armor: randRange(shipClass.armor[0], shipClass.armor[1]),
@@ -143,7 +143,7 @@ function rollStats(shipClass) {
  * @param {string} moduleKey - Key from SHIP_MODULES
  * @returns {Promise<object>} Item data for embedded creation
  */
-async function resolveShipModule(moduleKey) {
+export async function resolveShipModule(moduleKey) {
   const builtIn = SHIP_MODULES[moduleKey];
   if (!builtIn) return null;
 
@@ -152,14 +152,25 @@ async function resolveShipModule(moduleKey) {
   if (compendiumItem) return compendiumItem;
 
   // Fall back to built-in
+  const systemData = {
+    description: builtIn.description,
+    category: builtIn.category,
+    quantity: 1
+  };
+
+  // Include weapon stats for weapon modules
+  if (builtIn.category === "weapon") {
+    systemData.damage = builtIn.damage ?? 0;
+    systemData.range = builtIn.range ?? "";
+    systemData.crit = builtIn.crit ?? { numericValue: 0, customValue: "" };
+    systemData.bonus = builtIn.bonus ?? 0;
+    systemData.enabled = builtIn.enabled ?? true;
+  }
+
   return {
     name: builtIn.label,
     type: "shipModule",
-    system: {
-      description: builtIn.description,
-      category: builtIn.category,
-      quantity: 1
-    }
+    system: systemData
   };
 }
 

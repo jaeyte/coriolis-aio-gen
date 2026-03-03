@@ -1,8 +1,8 @@
 /**
  * Unified AIO Generator dialog.
  *
- * Combines character, encounter, and ship generators into a single dialog
- * with a generator-type selector that shows/hides the relevant form sections.
+ * Combines character, encounter, ship, ship encounter, party, and NPC
+ * generators into a single dialog with tabbed navigation.
  */
 
 import { CONCEPTS } from "./data/concepts.js";
@@ -11,9 +11,14 @@ import { GROUP_CONCEPTS } from "./data/group-concepts.js";
 import { ENCOUNTER_TEMPLATES } from "./data/encounters.js";
 import { DIFFICULTY_TIERS } from "./data/enemies.js";
 import { SHIP_CLASSES } from "./data/ships.js";
+import { SHIP_ENCOUNTER_TEMPLATES } from "./data/ship-encounters.js";
+import { NPC_ARCHETYPES, NPC_FACTIONS } from "./data/npcs.js";
 import { generateCharacter } from "./generator.js";
 import { generateEncounter } from "./encounter-generator.js";
 import { generateShip } from "./ship-generator.js";
+import { generateShipEncounter } from "./ship-encounter-generator.js";
+import { generateParty } from "./party-generator.js";
+import { generateQuickNPC } from "./npc-generator.js";
 
 /**
  * Open the unified AIO generator dialog.
@@ -38,7 +43,10 @@ export async function openUnifiedDialog(initialTab = "character") {
     icons: ICONS,
     encounterTemplates: ENCOUNTER_TEMPLATES,
     difficulties,
-    shipClasses: SHIP_CLASSES
+    shipClasses: SHIP_CLASSES,
+    shipEncounterTemplates: SHIP_ENCOUNTER_TEMPLATES,
+    npcArchetypes: NPC_ARCHETYPES,
+    npcFactions: NPC_FACTIONS
   };
 
   const html = await renderTemplate(templatePath, templateData);
@@ -63,6 +71,12 @@ export async function openUnifiedDialog(initialTab = "character") {
                 result = await _generateEncounterFromForm(form);
               } else if (genType === "ship") {
                 result = await _generateShipFromForm(form);
+              } else if (genType === "shipEncounter") {
+                result = await _generateShipEncounterFromForm(form);
+              } else if (genType === "party") {
+                result = await _generatePartyFromForm(form);
+              } else if (genType === "npc") {
+                result = await _generateNPCFromForm(form);
               }
               resolve(result);
             } catch (err) {
@@ -86,9 +100,10 @@ export async function openUnifiedDialog(initialTab = "character") {
         _setupDynamicSubConcepts(html);
         _setupEncounterDescription(html);
         _setupShipClassDescription(html);
+        _setupShipEncounterDescription(html);
       }
     }, {
-      width: 460,
+      width: 520,
       classes: ["coriolis-aio-gen-dialog-window"]
     });
 
@@ -126,6 +141,32 @@ function _generateShipFromForm(form) {
     classKey: form.classKey.value || undefined,
     name: form.shipName.value || undefined,
     includeProblem: form.includeProblem.checked
+  });
+}
+
+function _generateShipEncounterFromForm(form) {
+  return generateShipEncounter({
+    templateKey: form.shipEncounterTemplate.value || undefined,
+    difficulty: form.shipEncounterDifficulty.value,
+    partySize: parseInt(form.shipEncounterPartySize.value) || 4,
+    partyXP: parseInt(form.shipEncounterPartyXP.value) || 0
+  });
+}
+
+function _generatePartyFromForm(form) {
+  return generateParty({
+    partySize: parseInt(form.partyGenSize.value) || 4,
+    groupConceptKey: form.partyGroupConceptKey.value || undefined,
+    allowDuplicates: form.allowDuplicates.checked
+  });
+}
+
+function _generateNPCFromForm(form) {
+  return generateQuickNPC({
+    archetypeKey: form.npcArchetype.value || undefined,
+    factionKey: form.npcFaction.value || undefined,
+    name: form.npcName.value || undefined,
+    createActor: form.npcCreateActor.checked
   });
 }
 
@@ -209,6 +250,25 @@ function _setupShipClassDescription(html) {
     const key = selectEl.value;
     descEl.textContent = key && SHIP_CLASSES[key]
       ? SHIP_CLASSES[key].description
+      : "";
+  }
+
+  selectEl.addEventListener("change", updateDesc);
+  updateDesc();
+}
+
+// ── Ship Encounter Description ──────────────────────────────
+
+function _setupShipEncounterDescription(html) {
+  const root = html.find ? html[0] : html;
+  const selectEl = root.querySelector("#aio-ship-encounter-template");
+  const descEl = root.querySelector("#aio-ship-encounter-desc");
+  if (!selectEl || !descEl) return;
+
+  function updateDesc() {
+    const key = selectEl.value;
+    descEl.textContent = key && SHIP_ENCOUNTER_TEMPLATES[key]
+      ? SHIP_ENCOUNTER_TEMPLATES[key].description
       : "";
   }
 

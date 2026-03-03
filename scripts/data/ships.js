@@ -37,7 +37,8 @@ export const SHIP_CLASSES = {
     requiredModules: ["bridge", "reactor", "gravitonProjector", "cabins", "turret"],
     optionalModulePools: [
       "sensorArray", "torpedoLauncher", "escapePods", "medlab",
-      "armorPlating", "ecm", "stasisHold", "workshop"
+      "armorPlating", "ecm", "stasisHold", "workshop",
+      "autocannon", "pointDefense"
     ]
   },
   courier: {
@@ -53,7 +54,7 @@ export const SHIP_CLASSES = {
     requiredModules: ["bridge", "reactor", "gravitonProjector", "cabins"],
     optionalModulePools: [
       "smugglerCompartment", "sensorArray", "escapePods", "ecm",
-      "cargoHold", "turret", "armorPlating"
+      "cargoHold", "turret", "armorPlating", "autocannon"
     ]
   },
   bulkHauler: {
@@ -70,7 +71,7 @@ export const SHIP_CLASSES = {
     optionalModulePools: [
       "escapePods", "medlab", "workshop", "dockingClamps",
       "sensorArray", "turret", "armorPlating", "stasisHold",
-      "hangarBay", "cargoHold"
+      "hangarBay", "cargoHold", "pointDefense", "heavyCannon"
     ]
   },
   armedMerchant: {
@@ -87,7 +88,7 @@ export const SHIP_CLASSES = {
     optionalModulePools: [
       "torpedoLauncher", "sensorArray", "escapePods", "medlab",
       "workshop", "armorPlating", "ecm", "smugglerCompartment",
-      "dockingClamps"
+      "dockingClamps", "autocannon", "heavyCannon", "pointDefense"
     ]
   },
   explorationVessel: {
@@ -104,7 +105,7 @@ export const SHIP_CLASSES = {
     optionalModulePools: [
       "escapePods", "workshop", "cargoHold", "hangarBay",
       "turret", "armorPlating", "stasisHold", "dockingClamps",
-      "ecm", "laboratory"
+      "ecm", "laboratory", "pointDefense", "miningLaser"
     ]
   }
 };
@@ -150,12 +151,38 @@ export const SHIP_MODULES = {
   turret: {
     label: "Turret",
     category: "weapon",
-    description: "A weapon emplacement housing a mounted cannon or autocannon."
+    description: "A weapon emplacement housing a mounted cannon or autocannon.",
+    damage: 3, range: "medium", crit: { numericValue: 3, customValue: "" }, bonus: 1, enabled: true
   },
   torpedoLauncher: {
     label: "Torpedo Launcher",
     category: "weapon",
-    description: "A launcher system for ship-to-ship torpedoes. Devastating but limited ammunition."
+    description: "A launcher system for ship-to-ship torpedoes. Devastating but limited ammunition.",
+    damage: 6, range: "long", crit: { numericValue: 2, customValue: "" }, bonus: 0, enabled: true
+  },
+  autocannon: {
+    label: "Autocannon",
+    category: "weapon",
+    description: "A rapid-fire ballistic weapon, effective at close range against lightly armored targets.",
+    damage: 2, range: "short", crit: { numericValue: 3, customValue: "" }, bonus: 2, enabled: true
+  },
+  pointDefense: {
+    label: "Point Defense System",
+    category: "weapon",
+    description: "A rapid-tracking turret designed to intercept incoming torpedoes and small craft.",
+    damage: 1, range: "short", crit: { numericValue: 0, customValue: "" }, bonus: 3, enabled: true
+  },
+  heavyCannon: {
+    label: "Heavy Cannon",
+    category: "weapon",
+    description: "A massive ship-mounted artillery piece capable of punching through heavy armor.",
+    damage: 5, range: "long", crit: { numericValue: 1, customValue: "" }, bonus: -1, enabled: true
+  },
+  miningLaser: {
+    label: "Mining Laser",
+    category: "weapon",
+    description: "An industrial cutting laser repurposed for combat. Short range but searing.",
+    damage: 3, range: "short", crit: { numericValue: 2, customValue: "" }, bonus: 1, enabled: true
   },
   sensorArray: {
     label: "Sensor Array",
