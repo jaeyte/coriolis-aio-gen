@@ -13,12 +13,14 @@ import { DIFFICULTY_TIERS } from "./data/enemies.js";
 import { SHIP_CLASSES } from "./data/ships.js";
 import { SHIP_ENCOUNTER_TEMPLATES } from "./data/ship-encounters.js";
 import { NPC_ARCHETYPES, NPC_FACTIONS } from "./data/npcs.js";
+import { MISSION_TEMPLATES } from "./data/missions.js";
 import { generateCharacter } from "./generator.js";
 import { generateEncounter } from "./encounter-generator.js";
 import { generateShip } from "./ship-generator.js";
 import { generateShipEncounter } from "./ship-encounter-generator.js";
 import { generateParty } from "./party-generator.js";
 import { generateQuickNPC } from "./npc-generator.js";
+import { generateMission } from "./mission-generator.js";
 
 /**
  * Open the unified AIO generator dialog.
@@ -46,7 +48,8 @@ export async function openUnifiedDialog(initialTab = "character") {
     shipClasses: SHIP_CLASSES,
     shipEncounterTemplates: SHIP_ENCOUNTER_TEMPLATES,
     npcArchetypes: NPC_ARCHETYPES,
-    npcFactions: NPC_FACTIONS
+    npcFactions: NPC_FACTIONS,
+    missionTemplates: MISSION_TEMPLATES
   };
 
   const html = await renderTemplate(templatePath, templateData);
@@ -77,6 +80,8 @@ export async function openUnifiedDialog(initialTab = "character") {
                 result = await _generatePartyFromForm(form);
               } else if (genType === "npc") {
                 result = await _generateNPCFromForm(form);
+              } else if (genType === "mission") {
+                result = await _generateMissionFromForm(form);
               }
               resolve(result);
             } catch (err) {
@@ -101,6 +106,7 @@ export async function openUnifiedDialog(initialTab = "character") {
         _setupEncounterDescription(html);
         _setupShipClassDescription(html);
         _setupShipEncounterDescription(html);
+        _setupMissionDescription(html);
       }
     }, {
       width: 520,
@@ -213,6 +219,20 @@ function _generateNPCFromForm(form) {
   });
 }
 
+function _generateMissionFromForm(form) {
+  return generateMission({
+    templateKey: form.missionTemplate.value || undefined,
+    factionKey: form.missionFaction.value || undefined,
+    generatePatron: form.missionGeneratePatron.checked,
+    generateAntagonist: form.missionGenerateAntagonist.checked,
+    generateEncounter: form.missionGenerateEncounter.checked,
+    generateShipEncounter: form.missionGenerateShipEncounter.checked,
+    partySize: parseInt(form.missionPartySize.value) || 4,
+    partyXP: parseInt(form.missionPartyXP.value) || 0,
+    difficulty: form.missionDifficulty.value
+  });
+}
+
 // ── Tab Switching ───────────────────────────────────────────
 
 function _setupTabSwitching(html) {
@@ -312,6 +332,25 @@ function _setupShipEncounterDescription(html) {
     const key = selectEl.value;
     descEl.textContent = key && SHIP_ENCOUNTER_TEMPLATES[key]
       ? SHIP_ENCOUNTER_TEMPLATES[key].description
+      : "";
+  }
+
+  selectEl.addEventListener("change", updateDesc);
+  updateDesc();
+}
+
+// ── Mission Description ─────────────────────────────────────
+
+function _setupMissionDescription(html) {
+  const root = html.find ? html[0] : html;
+  const selectEl = root.querySelector("#aio-mission-template");
+  const descEl = root.querySelector("#aio-mission-desc");
+  if (!selectEl || !descEl) return;
+
+  function updateDesc() {
+    const key = selectEl.value;
+    descEl.textContent = key && MISSION_TEMPLATES[key]
+      ? MISSION_TEMPLATES[key].description
       : "";
   }
 
