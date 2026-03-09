@@ -1,23 +1,37 @@
 # Coriolis AIO Generator
 
-A Foundry VTT v13 module for the **Coriolis: The Third Horizon** system (`yzecoriolis`) that generates complete, ready-to-play characters, NPCs, and full encounters with enemies, loot, and difficulty scaling.
+A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) that provides seven generators in a single tabbed dialog — characters, encounters, ships, ship encounters, parties, NPCs, and missions.
 
-## Features
+## Features at a Glance
 
-### One-Click Character Generation
+| Generator | Output | Key Details |
+|---|---|---|
+| **Character** | Actor (character/NPC) | 11 concepts, 33 sub-concepts, full attributes/skills/talents/gear |
+| **Encounter** | Enemy actors + loot journal | 16 templates, 20 enemy types, 4 difficulty tiers, XP scaling |
+| **Ship** | Ship actor with modules | 9 ship classes, 18+ modules, functional weapons with damage/range/crit |
+| **Ship Encounter** | Enemy ship + crew actors | 10 enemy ships, 9 templates, salvage loot, boarding party linking |
+| **Party** | 3–6 characters in a folder | Crew position assignment via concept affinity matching |
+| **Quick NPC** | Actor or journal entry | 10 archetypes, 10 factions, personality/motivation/quirk, gear loadouts |
+| **Mission** | Journal briefing + NPCs | 10 templates, patron/antagonist NPCs, linked encounters, reward scaling |
 
-Click the **Generate Character** button in the Actors sidebar to open the configuration dialog. Choose your options or leave everything on "Random" for a fully randomized character. The generator creates a complete Foundry actor with all data filled in and items embedded — ready to play immediately.
+## Getting Started
 
-### Full Rulebook-Compliant Creation
+1. Install the module (see [Installation](#installation))
+2. Enable it in your world's Module Management
+3. Click the **AIO Generator** button in the Actors sidebar
+4. Pick a tab, configure options, and click **Generate**
 
-The generator follows the official Coriolis character creation rules:
+---
 
-- **14 attribute points** distributed across Strength, Agility, Wits, and Empathy (min 2, max 5 each), weighted toward the concept's key attribute
-- **Concept skill points** (8 points) focused on the concept's core skills, plus **upbringing bonus points** (2–6 depending on background)
-- **Starting talent** selected from the character's concept talent pool
-- **Icon talent** automatically assigned based on chosen Icon
-- **Group concept talent** randomly selected from the crew's group concept
-- **Starting gear** (weapons, armor, and equipment) based on sub-concept, embedded as items on the actor
+## Character Generator
+
+Creates complete, rulebook-compliant characters:
+
+- **14 attribute points** distributed across Strength, Agility, Wits, Empathy (min 2, max 5), weighted by concept
+- **Concept + upbringing skill points** assigned to appropriate skills
+- **Starting talent** from the concept talent pool, plus **Icon talent** and **group concept talent**
+- **Starting gear** (weapons, armor, equipment) embedded as items based on sub-concept
+- Randomly generated **name**, **personal problem**, **appearance**, and **background**
 
 ### 11 Concepts with 33 Sub-Concepts
 
@@ -35,159 +49,111 @@ The generator follows the official Coriolis character creation rules:
 | Soldier | Legionnaire, Mercenary, Officer |
 | Trailblazer | Colonist, Prospector, Scout |
 
-### Backgrounds and Personal Details
+### Backgrounds
 
-- **10 origins** across the Third Horizon (Kua, Dabaran, Algol, Mira, and more)
-- **3 upbringings** that affect skill points, starting birr, and reputation:
-  - Plebeian — 6 bonus skill points, 500 birr, 2 reputation
-  - Stationary — 4 bonus skill points, 1,000 birr, 4 reputation
-  - Privileged — 2 bonus skill points, 5,000 birr, 6 reputation
-- **16 Icons** (Lady of Tears, The Dancer, The Gambler, etc.) with matching Icon talents
-- **5 group concepts** (Free Traders, Mercenaries, Agents, Explorers, Pilgrims)
-- Randomly generated **personal problems**, **appearance** (face and clothing), and **Arabic/Persian-inspired names** with optional nicknames
-
-### 70+ Talents
-
-Talents are organized by category and automatically embedded on the generated actor:
-
-- **Group concept talents** — one per group concept (e.g., A Nose for Birr, Assault, Camouflage)
-- **Concept talents** — two per concept (e.g., Hacker, Combat Veteran, Field Medicurg)
-- **Icon talents** — one per Icon, granted automatically
-- **General talents** — Defensive, Executioner, Intimidating, Third Eye, and more
-- **Humanite talents** — Pheromones, Night Vision, Regenerative, etc.
-- **Cybernetic talents** — Accelerated Reflexes, Body Armor, Neural Link, etc.
-- **Mystical power talents** — Clairvoyant, Telekinesis, Telepathy, Premonition, etc.
-
-### Starting Gear per Sub-Concept
-
-Every sub-concept has a tailored starting gear loadout. Examples:
-
-- **Legionnaire** — Vulcan Carbine, Armor Vest, Survival Kit, Communicator
-- **Spy** — Vulcan Pistol, Disguise Kit, Spy Glass, Communicator
-- **Medicurg** — Medicurgy Kit, Computer Tablet, Medlab Drugs, Communicator
-- **Scout** — Vulcan Carbine, Survival Kit, Binoculars, Communicator
-
-All items are created as proper embedded documents on the actor with correct system data (damage, range, armor rating, weight, tech tier, etc.).
-
-### Compendium-First Resolution
-
-When the premium **Coriolis Core Rulebook** module (`coriolis-corerules`) is installed, the generator automatically pulls talent and item data from its compendium packs. This gives you richer descriptions, proper icons, and full item data from the official source. If the premium module is not installed, the generator falls back gracefully to its built-in data definitions.
-
-Resolution priority:
-1. `coriolis-corerules` compendium packs (premium module)
-2. World-level compendiums
-3. Built-in module data
-
-### Configuration Dialog
-
-The dialog lets you control any or all aspects of generation:
-
-| Option | Choices |
-|---|---|
-| Actor Type | Character or NPC |
-| Name | Custom name or auto-generated |
-| Concept | Pick one or Random |
-| Sub-Concept | Pick one or Random (filtered by concept) |
-| Group Concept | Pick one or Random |
-| Upbringing | Plebeian, Stationary, Privileged, or Random |
-| Origin | Pick one or Random |
-| Icon | Pick one or Random |
-
-The sub-concept dropdown dynamically updates based on the selected concept.
+- 10 origins, 3 upbringings (Plebeian/Stationary/Privileged), 16 Icons
+- 5 group concepts (Free Traders, Mercenaries, Agents, Explorers, Pilgrims)
+- 70+ talents (concept, group, icon, general, humanite, cybernetic, mystic)
+- Arabic/Persian-inspired name generator with 110+ first names and 60+ family names
 
 ---
 
 ## Encounter Generator
 
-### One-Click Encounter Generation
+Creates scaled combat encounters with enemy actors and loot:
 
-Click the **Generate Encounter** button in the Actors sidebar to create a complete combat encounter. The generator creates all enemy NPCs as Foundry actors with stats, weapons, armor, and talents, plus an optional loot journal entry.
+- **16 encounter templates** — Bar Fight, Pirate Ambush, Legion Checkpoint, Consortium Raid, Assassin Strike, Dark Ritual, Djinn Encounter, and more
+- **20 enemy types** across 9 factions (criminals, Legion, Consortium, cultists, beasts, darkbound)
+- **4 threat categories** — Minion (60% HP), Regular (100%), Elite (140%), Boss (200%)
+- **Difficulty scaling** — Easy/Normal/Hard/Deadly affects stats, enemy count, and loot
+- **XP scaling** — enemy stats scale with party experience (Novice through Legendary)
+- **Loot generation** — tiered loot journal with birr, weapons, armor, gear, and valuables
+- **Ship encounter linking** — optionally auto-generate a linked ship encounter for pirate templates
 
-### Difficulty Scaling
+---
 
-Encounters scale along two axes:
+## Ship Generator
 
-**Difficulty Tier** controls overall enemy power and loot quality:
+Creates ship actors with functional modules and weapons:
 
-| Tier | Enemy Stats | Enemy Count | Loot |
-|---|---|---|---|
-| Easy | 0.7x | 0.7x | 0.5x |
-| Normal | 1.0x | 1.0x | 1.0x |
-| Hard | 1.3x | 1.2x | 1.5x |
-| Deadly | 1.6x | 1.5x | 2.0x |
+- **9 ship classes** — Courier, Patrol Boat, Bulk Hauler, Armed Merchant, Exploration Vessel, Colony Ship, Warship, Luxury Yacht, Colony Ship
+- **18+ ship modules** including 6 weapon types with full combat stats (damage, range, crit, bonus)
+- Stats rolled from class ranges: hull points, armor, speed, maneuverability, signature
+- Optional **ship quirk/problem** for narrative flavor
+- Crew positions, module slots, and energy points all set correctly
 
-**Party XP** scales enemy stats based on how experienced the players are:
+### Weapon Modules
 
-| XP Range | Tier | Stat Bonus |
-|---|---|---|
-| 0–10 | Novice | +0 |
-| 11–30 | Seasoned | +1 |
-| 31–60 | Veteran | +2 |
-| 61–100 | Elite | +3 |
-| 101+ | Legendary | +4 |
+| Weapon | Damage | Range | Crit | Bonus |
+|---|---|---|---|---|
+| Turret | 3 | Medium | 3 | +1 |
+| Torpedo Launcher | 6 | Long | 2 | 0 |
+| Autocannon | 2 | Short | 3 | +2 |
+| Point Defense | 1 | Short | 0 | +3 |
+| Heavy Cannon | 5 | Long | 1 | -1 |
+| Mining Laser | 3 | Short | 2 | +1 |
 
-**Party Size** scales enemy count proportionally (baseline: 4 players).
+---
 
-### 20 Enemy Types across 9 Factions
+## Ship Encounter Generator
 
-| Faction | Enemies |
-|---|---|
-| Criminals & Pirates | Thug, Pirate, Corsair Captain |
-| The Legion | Patrol Soldier, Officer |
-| The Consortium | Agent, Enforcer |
-| Assassin's Guild | Faction Assassin |
-| Mercenaries | Mercenary, Commander |
-| Civilian Security | Station Guard |
-| Cultists & Mystics | Cultist, Dark Mystic, Cult Leader |
-| Beasts & Creatures | Skavara, Ghor Hound, Megara |
-| The Dark Between the Stars | Darkbound Servant, Djinni |
+Creates space combat encounters with enemy ships and crew:
 
-Enemies are categorized by threat level:
-- **Minion** — weak, appear in groups, 0 talents, 60% HP
-- **Regular** — standard combatants, 1 talent, full HP
-- **Elite** — tough enemies, 2 talents, 140% HP
-- **Boss** — powerful single enemies, 3 talents, 200% HP
+- **10 enemy ship templates** — Pirate Skiff, Corsair Flagship, Legion Cutter, Smuggler Runner, Darkbound Hulk, and more
+- **9 encounter templates** — Pirate Ambush, Corsair Fleet, Legion Intercept, Mercenary Ambush, Ghost Ship, and more
+- **4 ship categories** — Fodder (0.7x hull), Standard (1.0x), Heavy (1.3x), Flagship (1.6x)
+- **Key crew NPCs** generated per ship (captain, pilot, gunner, engineer, etc.)
+- **Salvage loot** journal generation from defeated ships
+- **Boarding party linking** — auto-generate a linked personal combat encounter
 
-### 17 Encounter Templates
+---
 
-Pre-built scenarios that define enemy composition and environment:
+## Party Generator
 
-- **Bar Fight** — thugs in a cantina
-- **Pirate Ambush / Pirate Raid** — shipboard combat with a captain
-- **Legion Checkpoint** — patrol soldiers and an officer
-- **Consortium Raid** — agents and enforcers
-- **Assassin Strike** — guild operatives
-- **Mercenary Squad** — commander with soldiers
-- **Cultist Ambush / Dark Ritual** — mystics and cultists in ruins
-- **Vermin Infestation** — skavara in the lower decks
-- **Wild Hunt / Apex Predator** — beasts in the wilderness
-- **Darkbound Attack / Djinn Encounter** — supernatural horrors
-- **Security Alert** — station guards closing in
-- And more...
+Creates a complementary group of 3–6 characters:
 
-### Loot Generation
+- Each character gets a **unique concept** (unless duplicates are allowed)
+- **Crew positions** assigned via greedy affinity matching (e.g., Pilot concept → pilot position)
+- Shared **group concept** for the whole party
+- Characters grouped in a **Foundry folder** for organization
 
-Each encounter can generate a loot journal entry containing:
+---
 
-- **Birr** (cash) scaled by difficulty and encounter type
-- **Weapons** — from knives to accelerator pistols, tiered by difficulty
-- **Armor** — light vests to combat armor
-- **Gear** — medkits, tools, computer tablets, proximity sensors
-- **Valuables** — prayer beads, gemstones, encrypted data chips, ancient artifacts, portal builder fragments
+## Quick NPC Generator
 
-Loot is organized into four tiers (Basic, Standard, Advanced, Elite) with weighted random selection, so harder encounters drop better rewards.
+Creates narrative NPCs as actors or journal entries:
 
-### Encounter Configuration Dialog
+- **10 archetypes** — Merchant, Informant, Bureaucrat, Crime Boss, Mystic, Scholar, Faction Leader, Technician, Smuggler, Pilgrim
+- **10 factions** — Consortium, Legion, Church, Syndicate, Nomad Federation, Draconites, Ahlam's Temple, Free League, Zenithian Hegemony, Independent
+- **20 personality traits**, **15 motivations**, **20 quirks** for rich characterization
+- **Gear loadouts** per archetype — weapons, armor, and equipment resolved from compendiums
+- Actor output includes simplified attributes/skills; journal output provides a narrative description
 
-| Option | Description |
-|---|---|
-| Encounter Type | Pick a specific scenario or Random |
-| Difficulty | Easy, Normal, Hard, or Deadly |
-| Party Size | Number of players (scales enemy count) |
-| Average XP per Player | Scales enemy stats for experienced parties |
-| Generate Loot | Toggle loot journal creation on/off |
+---
 
-The template dropdown shows a description of each encounter type.
+## Mission Generator
+
+Creates complete mission briefings with linked content:
+
+- **10 mission templates** — Cargo Run, Bounty Hunt, Faction Diplomacy, Artifact Recovery, Smuggler's Run, Pilgrim Escort, Station Intrigue, Rescue Mission, Derelict Salvage, Dark Investigation
+- **20 random complications** that twist the mission (betrayals, time limits, rival crews, cursed cargo)
+- **Patron NPC** auto-generated from the mission's faction
+- **Antagonist NPC** auto-generated from a rival faction
+- **Linked combat encounter** — optionally create enemies appropriate to the mission
+- **Linked ship encounter** — optionally create a space combat scenario
+- **Reward scaling** by tier: Modest (500–1,500 birr) through Fortune (15,000–50,000 birr)
+- Location flavor drawn from the mission's environment (station, ship, ruins, wilderness)
+
+---
+
+## Compendium-First Resolution
+
+When the premium **Coriolis Core Rulebook** module (`coriolis-corerules`) is installed, all generators automatically pull talent and item data from its compendium packs for richer descriptions and proper icons. Without it, the module falls back to built-in data.
+
+Resolution priority:
+1. `coriolis-corerules` compendium packs (premium module)
+2. World-level compendiums
+3. Built-in module data
 
 ---
 
@@ -204,7 +170,7 @@ The template dropdown shows a description of each encounter type.
 
 ### Manual Installation
 
-1. Download or clone this repository into your Foundry VTT `Data/modules/` directory:
+1. Download or clone into your Foundry `Data/modules/` directory:
    ```
    cd /path/to/foundry/Data/modules/
    git clone https://github.com/jaeyte/coriolis-aio-gen.git
@@ -222,29 +188,37 @@ The template dropdown shows a description of each encounter type.
 
 ```
 coriolis-aio-gen/
-├── module.json                      # Module manifest
+├── module.json
 ├── scripts/
-│   ├── main.js                      # Entry point, hooks, sidebar buttons
-│   ├── generator.js                 # Character generation algorithm
-│   ├── dialog.js                    # Character config dialog
+│   ├── main.js                      # Entry point, hooks, sidebar button
+│   ├── unified-dialog.js            # Tabbed dialog with all 7 generators
+│   ├── generator.js                 # Character generation
 │   ├── encounter-generator.js       # Encounter generation with scaling
-│   ├── encounter-dialog.js          # Encounter config dialog
+│   ├── ship-generator.js            # Ship generation with modules/weapons
+│   ├── ship-encounter-generator.js  # Ship encounter + crew + salvage
+│   ├── party-generator.js           # Party generation with crew roles
+│   ├── npc-generator.js             # Quick NPC generation
+│   ├── mission-generator.js         # Mission briefing generation
 │   ├── compendium-resolver.js       # Compendium-first item resolution
 │   └── data/
 │       ├── concepts.js              # 11 concepts, 33 sub-concepts
 │       ├── talents.js               # 70+ talent definitions
 │       ├── gear.js                  # Starting gear per sub-concept
-│       ├── names.js                 # Name generator (110+ first/60+ family names)
+│       ├── names.js                 # Name generator
 │       ├── backgrounds.js           # Origins, upbringings, icons, appearance
 │       ├── group-concepts.js        # 5 group concepts
 │       ├── enemies.js               # 20 enemy templates, weapons, armor
-│       ├── loot.js                  # Tiered loot tables with weighted drops
-│       └── encounters.js            # 17 encounter scenario templates
+│       ├── loot.js                  # Tiered loot tables
+│       ├── encounters.js            # 16 encounter templates
+│       ├── ships.js                 # 9 ship classes, 18+ modules
+│       ├── ship-encounters.js       # 10 enemy ships, 9 ship encounter templates
+│       ├── crew-roles.js            # Concept-to-crew-position affinity mapping
+│       ├── npcs.js                  # 10 archetypes, factions, traits, quirks
+│       └── missions.js              # 10 mission templates, complications, locations
 ├── templates/
-│   ├── generator-dialog.hbs         # Character dialog template
-│   └── encounter-dialog.hbs         # Encounter dialog template
+│   └── unified-dialog.hbs           # Tabbed dialog template
 ├── styles/
-│   └── generator.css                # Dialog and button styles
+│   └── generator.css                # Themed dialog and button styles
 └── lang/
     └── en.json                      # English localization
 ```
