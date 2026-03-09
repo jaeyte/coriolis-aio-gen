@@ -67,7 +67,7 @@ Hooks.on("getHeaderControlsActorDirectory", (app, controls) => {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
 
   controls.push({
-    icon: "fa-solid fa-dice-d20",
+    icon: "fas fa-dice-d20",
     label: "CORIOLIS_AIO.Button.Generate",
     action: "coriolisAioGenerate",
   });
