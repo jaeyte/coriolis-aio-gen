@@ -57,44 +57,42 @@ function selectConcepts(partySize, allowDuplicates) {
 
 /**
  * Assign crew positions to concepts using greedy affinity matching.
- * Each position is assigned to the concept that most prefers it.
+ * Returns an array of positions (one per index in conceptKeys) to support
+ * duplicate concept keys.
  */
 function assignCrewPositions(conceptKeys) {
-  const assigned = {};
+  const positions = new Array(conceptKeys.length).fill(null);
   const takenPositions = new Set();
 
   // First pass: assign by affinity
-  for (const conceptKey of conceptKeys) {
-    const affinities = CONCEPT_CREW_AFFINITY[conceptKey] || [];
-    let assignedPos = null;
+  for (let i = 0; i < conceptKeys.length; i++) {
+    const affinities = CONCEPT_CREW_AFFINITY[conceptKeys[i]] || [];
 
     for (const pos of affinities) {
       if (!takenPositions.has(pos)) {
-        assignedPos = pos;
+        positions[i] = pos;
+        takenPositions.add(pos);
         break;
       }
     }
-
-    if (assignedPos) {
-      assigned[conceptKey] = assignedPos;
-      takenPositions.add(assignedPos);
-    }
   }
 
-  // Second pass: fill unassigned concepts with remaining positions
-  const unassigned = conceptKeys.filter(k => !assigned[k]);
+  // Second pass: fill unassigned members with remaining positions
   const remainingPositions = CREW_POSITIONS_ORDER.filter(p => !takenPositions.has(p));
+  let remIdx = 0;
 
-  for (let i = 0; i < unassigned.length; i++) {
-    if (i < remainingPositions.length) {
-      assigned[unassigned[i]] = remainingPositions[i];
+  for (let i = 0; i < positions.length; i++) {
+    if (positions[i] !== null) continue;
+
+    if (remIdx < remainingPositions.length) {
+      positions[i] = remainingPositions[remIdx++];
     } else {
-      // More crew than positions — assign duplicates
-      assigned[unassigned[i]] = CREW_POSITIONS_ORDER[i % CREW_POSITIONS_ORDER.length];
+      // More crew than positions — cycle through all positions
+      positions[i] = CREW_POSITIONS_ORDER[i % CREW_POSITIONS_ORDER.length];
     }
   }
 
-  return assigned;
+  return positions;
 }
 
 // ── Main Party Generator ────────────────────────────────────
@@ -133,16 +131,16 @@ export async function generateParty(options = {}) {
 
   // Generate each character
   const actors = [];
-  for (const conceptKey of conceptKeys) {
+  for (let i = 0; i < conceptKeys.length; i++) {
     const actor = await generateCharacter({
       actorType: "character",
-      conceptKey,
+      conceptKey: conceptKeys[i],
       groupConceptKey
     });
 
     if (actor) {
       // Move to party folder and set crew position
-      const crewPosition = crewAssignments[conceptKey] || "";
+      const crewPosition = crewAssignments[i] || "";
       await actor.update({
         folder: folder.id,
         "system.bio.crewPosition.position": crewPosition

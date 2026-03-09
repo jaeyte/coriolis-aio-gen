@@ -67,7 +67,7 @@ Hooks.on("getHeaderControlsActorDirectory", (app, controls) => {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
 
   controls.push({
-    icon: "fa-solid fa-dice-d20",
+    icon: "fas fa-dice-d20",
     label: "CORIOLIS_AIO.Button.Generate",
     action: "coriolisAioGenerate",
   });
@@ -141,6 +141,7 @@ function findActionsContainer(root) {
 function injectButton(root) {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
   if (root.querySelector(`.${BTN_CLASS}`)) return; // already injected
+  if (root.querySelector("[data-action='coriolisAioGenerate']")) return; // v13 header control present
 
   const container = findActionsContainer(root);
   if (!container) {

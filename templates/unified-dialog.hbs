@@ -32,6 +32,9 @@
     <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'npc')}}active{{/if}}" data-tab="npc">
       <i class="fas fa-user-secret"></i> {{localize "CORIOLIS_AIO.Tab.NPC"}}
     </button>
+    <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'mission')}}active{{/if}}" data-tab="mission">
+      <i class="fas fa-scroll"></i> {{localize "CORIOLIS_AIO.Tab.Mission"}}
+    </button>
   </div>
 
   {{!-- ═══════════════════════════════════════════════
@@ -372,6 +375,96 @@
           {{localize "CORIOLIS_AIO.NPC.CreateActor"}}
         </label>
         <p class="hint">{{localize "CORIOLIS_AIO.NPC.CreateActorHint"}}</p>
+      </div>
+    </fieldset>
+  </div>
+
+  {{!-- ═══════════════════════════════════════════════
+       MISSION PANEL
+       ═══════════════════════════════════════════════ --}}
+  <div class="coriolis-gen-panel {{#unless (eq initialTab 'mission')}}hidden{{/unless}}" data-panel="mission">
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-scroll"></i> {{localize "CORIOLIS_AIO.Mission.Title"}}</legend>
+
+      <div class="form-group">
+        <label for="aio-mission-template">{{localize "CORIOLIS_AIO.Mission.Template"}}</label>
+        <select id="aio-mission-template" name="missionTemplate">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each missionTemplates}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+        <p class="hint" id="aio-mission-desc"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="aio-mission-faction">{{localize "CORIOLIS_AIO.Mission.PatronFaction"}}</label>
+        <select id="aio-mission-faction" name="missionFaction">
+          <option value="">{{localize "CORIOLIS_AIO.Dialog.Random"}}</option>
+          {{#each npcFactions}}
+          <option value="{{@key}}">{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-users"></i> {{localize "CORIOLIS_AIO.Mission.NPCs"}}</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="missionGeneratePatron" checked />
+          {{localize "CORIOLIS_AIO.Mission.GeneratePatron"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.Mission.GeneratePatronHint"}}</p>
+      </div>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="missionGenerateAntagonist" checked />
+          {{localize "CORIOLIS_AIO.Mission.GenerateAntagonist"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.Mission.GenerateAntagonistHint"}}</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-crosshairs"></i> {{localize "CORIOLIS_AIO.Mission.Encounters"}}</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="missionGenerateEncounter" />
+          {{localize "CORIOLIS_AIO.Mission.GenerateEncounter"}}
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="missionGenerateShipEncounter" />
+          {{localize "CORIOLIS_AIO.Mission.GenerateShipEncounter"}}
+        </label>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="aio-mission-party-size">{{localize "CORIOLIS_AIO.Encounter.PartySize"}}</label>
+          <input type="number" id="aio-mission-party-size" name="missionPartySize" value="4" min="1" max="10" />
+        </div>
+
+        <div class="form-group">
+          <label for="aio-mission-party-xp">{{localize "CORIOLIS_AIO.Encounter.PartyXP"}}</label>
+          <input type="number" id="aio-mission-party-xp" name="missionPartyXP" value="0" min="0" max="200" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="aio-mission-difficulty">{{localize "CORIOLIS_AIO.Mission.Difficulty"}}</label>
+        <select id="aio-mission-difficulty" name="missionDifficulty">
+          {{#each difficulties}}
+          <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </select>
       </div>
     </fieldset>
   </div>

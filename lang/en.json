@@ -50,5 +50,18 @@
   "CORIOLIS_AIO.ShipEncounter.GenerateBoardingHint": "Auto-generates a linked personal combat encounter for boarding actions.",
   "CORIOLIS_AIO.Encounter.GenerateEnemyShip": "Generate enemy ship encounter",
   "CORIOLIS_AIO.Encounter.GenerateEnemyShipHint": "Auto-generates a linked ship encounter if the template has one.",
+  "CORIOLIS_AIO.Tab.Mission": "Mission",
+  "CORIOLIS_AIO.Mission.Title": "Mission Generator",
+  "CORIOLIS_AIO.Mission.Template": "Mission Type",
+  "CORIOLIS_AIO.Mission.PatronFaction": "Patron Faction",
+  "CORIOLIS_AIO.Mission.NPCs": "Key NPCs",
+  "CORIOLIS_AIO.Mission.GeneratePatron": "Generate patron NPC",
+  "CORIOLIS_AIO.Mission.GeneratePatronHint": "Creates an NPC actor for the mission's patron.",
+  "CORIOLIS_AIO.Mission.GenerateAntagonist": "Generate antagonist NPC",
+  "CORIOLIS_AIO.Mission.GenerateAntagonistHint": "Creates an NPC actor for the mission's antagonist.",
+  "CORIOLIS_AIO.Mission.Encounters": "Linked Encounters",
+  "CORIOLIS_AIO.Mission.GenerateEncounter": "Generate combat encounter",
+  "CORIOLIS_AIO.Mission.GenerateShipEncounter": "Generate ship encounter",
+  "CORIOLIS_AIO.Mission.Difficulty": "Encounter Difficulty",
   "CORIOLIS_AIO.Error.GenerationFailed": "Generation failed. Check the console for details."
 }
