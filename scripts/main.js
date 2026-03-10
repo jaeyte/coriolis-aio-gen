@@ -32,82 +32,12 @@ Hooks.once("ready", () => {
   // Fallback: try injecting into the already-rendered sidebar after a short
   // delay.  Covers edge cases where the directory was rendered before any of
   // our hooks fired (e.g. v13 cabinet-style sidebar).
-  setTimeout(() => {
-    try {
-      const dir = ui.actors;
-      const root =
-        dir?.element instanceof HTMLElement
-          ? dir.element
-          : dir?.element?.[0] ?? dir?.element?.get?.(0);
-      if (root) injectButton(root);
-    } catch { /* ignored */ }
-  }, 500);
+  setTimeout(() => injectButton(null), 500);
+  // Second attempt with a longer delay for slow-loading worlds
+  setTimeout(() => injectButton(null), 2000);
 });
 
-/* ---------- DOM injection (cross-version) ---------- */
-
-/**
- * Resolve the root HTMLElement from the render hook's html parameter.
- * Handles jQuery objects (v12) and vanilla HTMLElements (v13+).
- */
-function resolveRoot(html) {
-  if (html instanceof HTMLElement) return html;
-  if (html?.jquery) return html[0];
-  if (html?.[0] instanceof HTMLElement) return html[0];
-  return null;
-}
-
-/**
- * Try to find the "Create Actor" button so we can insert directly after it.
- * Returns the button element or null.
- */
-function findCreateActorButton(root) {
-  for (const sel of [
-    "[data-action='createDocument']",
-    "[data-action='createEntry']",
-    "[data-action='create']",
-    "button.create-entry",
-    "button.create-document",
-  ]) {
-    const btn = root.querySelector(sel);
-    if (btn) return btn;
-  }
-  return null;
-}
-
-/**
- * Find the best container element in the sidebar header to append our button.
- * Used as a fallback when the Create Actor button cannot be found.
- */
-function findActionsContainer(root) {
-  // v12 selectors
-  const v12 = root.querySelector(".header-actions");
-  if (v12) return v12;
-
-  // v13 selectors (ApplicationV2 DocumentDirectory)
-  for (const sel of [
-    ".action-buttons",
-    ".directory-header .action-buttons",
-    "[data-application-part='header'] .action-buttons",
-    ".directory-controls",
-    ".header-controls",
-  ]) {
-    const el = root.querySelector(sel);
-    if (el) return el;
-  }
-
-  // v13 part-based fallbacks
-  const headerPart = root.querySelector("[data-application-part='header']");
-  if (headerPart) return headerPart;
-
-  const dirHeader = root.querySelector(".directory-header");
-  if (dirHeader) return dirHeader;
-
-  const header = root.querySelector("header");
-  if (header) return header;
-
-  return null;
-}
+/* ---------- DOM injection ---------- */
 
 /**
  * Create the AIO Generator button element.
@@ -126,64 +56,117 @@ function createButton() {
 }
 
 /**
- * Inject the AIO Generator button into the given root element, positioned
- * directly after the "Create Actor" button.  Falls back to appending to the
- * actions container if the Create Actor button cannot be located.
+ * Attempt to inject the AIO Generator button into the Actors sidebar.
+ *
+ * In Foundry v13 (ApplicationV2), render hooks may only pass a partial
+ * element (e.g. the list area) that does not include the header/action
+ * buttons.  To handle this reliably we search multiple candidate roots:
+ *   1. The element provided by the hook (if any)
+ *   2. The ui.actors application element
+ *   3. The global document (last resort)
+ *
+ * Within each root we look for the "Create Actor / Create Document" button
+ * and insert directly after it, or fall back to the header actions container.
  */
-function injectButton(root) {
+function injectButton(hookElement) {
   if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
-  if (root.querySelector(`.${BTN_CLASS}`)) return; // already injected
 
-  const btn = createButton();
+  // Build ordered list of candidate root elements to search.
+  const candidates = [];
+  if (hookElement instanceof HTMLElement) candidates.push(hookElement);
+  try {
+    const dirEl = ui.actors?.element;
+    const el =
+      dirEl instanceof HTMLElement ? dirEl : dirEl?.[0] ?? dirEl?.get?.(0);
+    if (el instanceof HTMLElement) candidates.push(el);
+  } catch { /* ui.actors may not exist yet */ }
+  candidates.push(document.body);
 
-  // Preferred: insert directly after the Create Actor button
-  const createBtn = findCreateActorButton(root);
-  if (createBtn) {
-    createBtn.insertAdjacentElement("afterend", btn);
-    console.log(`${MODULE_ID} | Injected AIO Generator button after Create Actor`);
-    return;
+  for (const root of candidates) {
+    // Skip if already injected within this root
+    if (root.querySelector(`.${BTN_CLASS}`)) return;
+
+    // --- Try to find the "Create Actor" button ---
+    const createBtn = root.querySelector(
+      [
+        // v13 ApplicationV2 DocumentDirectory
+        "#actors [data-action='createDocument']",
+        "#actors [data-action='create']",
+        "[data-tab='actors'] [data-action='createDocument']",
+        "[data-tab='actors'] [data-action='create']",
+        // Direct child selectors (when root IS the actors panel)
+        "[data-action='createDocument']",
+        "[data-action='createEntry']",
+        "[data-action='create']",
+        // v12 class-based
+        "button.create-entry",
+        "button.create-document",
+      ].join(", ")
+    );
+
+    if (createBtn) {
+      const btn = createButton();
+      createBtn.insertAdjacentElement("afterend", btn);
+      console.log(`${MODULE_ID} | Injected button after Create Actor button`);
+      return;
+    }
+
+    // --- Fallback: find the header/actions container ---
+    const container = root.querySelector(
+      [
+        "#actors .header-actions",
+        "#actors .action-buttons",
+        "#actors .directory-header",
+        "[data-tab='actors'] .header-actions",
+        "[data-tab='actors'] .action-buttons",
+        "[data-tab='actors'] .directory-header",
+        ".header-actions",
+        ".action-buttons",
+        "[data-application-part='header'] .action-buttons",
+        ".directory-header .action-buttons",
+        ".directory-controls",
+        ".header-controls",
+        "[data-application-part='header']",
+        ".directory-header",
+      ].join(", ")
+    );
+
+    if (container) {
+      const btn = createButton();
+      container.appendChild(btn);
+      console.log(`${MODULE_ID} | Injected button into actions container`);
+      return;
+    }
   }
 
-  // Fallback: append to the actions container
-  const container = findActionsContainer(root);
-  if (container) {
-    container.appendChild(btn);
-    console.log(`${MODULE_ID} | Injected AIO Generator button into actions container`);
-    return;
-  }
-
-  console.warn(
-    `${MODULE_ID} | Could not find sidebar actions container to inject button.`
-  );
+  console.warn(`${MODULE_ID} | Could not find a place to inject the button`);
 }
 
 /* ---------- render hooks ---------- */
 
-// Primary: fires every time the ActorDirectory is rendered (v12 + v13).
-Hooks.on("renderActorDirectory", (app, html) => {
-  const root = resolveRoot(html);
-  if (!root) {
-    console.warn(`${MODULE_ID} | renderActorDirectory: could not resolve root element`);
-    return;
-  }
+// Primary: fires every time the ActorDirectory is rendered.
+Hooks.on("renderActorDirectory", (_app, html) => {
+  const root = html instanceof HTMLElement ? html : html?.[0] ?? null;
   injectButton(root);
 });
 
-// v13 fallback: fires when the user switches sidebar tabs.
+// Fires when the user switches sidebar tabs.
 Hooks.on("changeSidebarTab", (app) => {
   if (app?.id !== "actors" && app?.tabName !== "actors" && app?.constructor?.name !== "ActorDirectory") return;
-  const root = resolveRoot(app.element ?? app._element);
-  if (root) injectButton(root);
+  const el = app.element ?? app._element;
+  const root = el instanceof HTMLElement ? el : el?.[0] ?? null;
+  injectButton(root);
 });
 
-// v13 fallback: fires when the entire sidebar renders.
-Hooks.on("renderSidebar", (_app, html) => {
-  const root = resolveRoot(html);
-  if (!root) return;
-  // Find the actors tab panel inside the sidebar
-  const actorsPanel =
-    root.querySelector("#actors") ??
-    root.querySelector("[data-tab='actors']") ??
-    root.querySelector("[data-tab-group] [data-tab='actors']");
-  if (actorsPanel) injectButton(actorsPanel);
+// Fires when the entire sidebar renders (v13).
+Hooks.on("renderSidebar", () => {
+  // Delay slightly to let the sidebar DOM settle.
+  setTimeout(() => injectButton(null), 100);
+});
+
+// Fires when any ApplicationV2 renders — catch ActorDirectory specifically.
+Hooks.on("renderApplication", (app, html) => {
+  if (app?.id !== "actors" && app?.tabName !== "actors" && app?.constructor?.name !== "ActorDirectory") return;
+  const root = html instanceof HTMLElement ? html : html?.[0] ?? null;
+  injectButton(root);
 });
