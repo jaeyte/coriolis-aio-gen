@@ -19,8 +19,10 @@ A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) tha
 
 1. Install the module (see [Installation](#installation))
 2. Enable it in your world's Module Management
-3. Open the Actors sidebar and click the **AIO Generator** entry in the header controls dropdown
+3. An **AIO Generator** macro is automatically added to your hotbar on first load — click it to open the generator
 4. Pick a tab, configure options, and click **Generate**
+
+The generator can also be opened via the Actors sidebar header controls dropdown, or from a script macro: `game.modules.get("coriolis-aio-gen").api.openDialog()`.
 
 For the **AI NPC** tab, configure an API key in **Module Settings > Coriolis AIO Generator** first.
 
