@@ -15,7 +15,21 @@ Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Coriolis AIO Generator`);
 
   // Register module settings
-  game.settings.register(MODULE_ID, "anthropicApiKey", {
+  game.settings.register(MODULE_ID, "aiProvider", {
+    name: "CORIOLIS_AIO.Settings.Provider",
+    hint: "CORIOLIS_AIO.Settings.ProviderHint",
+    scope: "world",
+    config: true,
+    type: String,
+    default: "gemini",
+    choices: {
+      gemini: "Google Gemini (free tier)",
+      openrouter: "OpenRouter (free models)",
+      anthropic: "Anthropic Claude (paid)"
+    }
+  });
+
+  game.settings.register(MODULE_ID, "aiApiKey", {
     name: "CORIOLIS_AIO.Settings.ApiKey",
     hint: "CORIOLIS_AIO.Settings.ApiKeyHint",
     scope: "world",

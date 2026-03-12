@@ -1,10 +1,15 @@
 /**
  * AI-powered NPC generator for Coriolis: The Third Horizon.
  *
- * Takes a free-text prompt and calls the Anthropic API to produce a complete
+ * Takes a free-text prompt and calls an LLM API to produce a complete
  * NPC actor with attributes, skills, talents, gear, and narrative details.
  *
- * Requires an Anthropic API key stored in module settings.
+ * Supports multiple providers:
+ *  - Google Gemini (free tier)
+ *  - OpenRouter (free models available)
+ *  - Anthropic (paid)
+ *
+ * Requires an API key stored in module settings.
  */
 
 import { resolveFromCompendium } from "./compendium-resolver.js";
@@ -80,14 +85,103 @@ Respond with ONLY valid JSON matching this exact structure (no markdown, no expl
   "notes": "A short narrative summary of who this NPC is and their role in the story."
 }`;
 
-// ── API Call ─────────────────────────────────────────────────
+// ── Provider Definitions ─────────────────────────────────────
+
+const PROVIDERS = {
+  gemini: {
+    label: "Google Gemini (free tier)",
+    call: callGeminiAPI
+  },
+  openrouter: {
+    label: "OpenRouter (free models)",
+    call: callOpenRouterAPI
+  },
+  anthropic: {
+    label: "Anthropic Claude",
+    call: callAnthropicAPI
+  }
+};
+
+// ── API Callers ──────────────────────────────────────────────
 
 /**
- * Call the Anthropic Messages API.
- *
- * @param {string} apiKey - Anthropic API key
- * @param {string} userPrompt - User's NPC description
- * @returns {Promise<object>} Parsed NPC JSON
+ * Parse LLM text response into JSON, stripping markdown fences.
+ */
+function parseJsonResponse(text) {
+  const cleaned = text.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "").trim();
+  return JSON.parse(cleaned);
+}
+
+/**
+ * Google Gemini — free tier: 15 RPM, 1M tokens/day, 32k context.
+ * Uses the generativelanguage.googleapis.com REST API.
+ */
+async function callGeminiAPI(apiKey, userPrompt) {
+  const model = "gemini-2.0-flash";
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: [{ parts: [{ text: userPrompt }] }],
+      generationConfig: {
+        temperature: 0.8,
+        maxOutputTokens: 2048,
+        responseMimeType: "application/json"
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const errBody = await response.text();
+    throw new Error(`Gemini API error (${response.status}): ${errBody}`);
+  }
+
+  const data = await response.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error("Empty response from Gemini API");
+  return parseJsonResponse(text);
+}
+
+/**
+ * OpenRouter — aggregates many models. Free models available.
+ * Uses the OpenAI-compatible chat completions endpoint.
+ */
+async function callOpenRouterAPI(apiKey, userPrompt) {
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`,
+      "HTTP-Referer": window.location.href,
+      "X-Title": "Coriolis AIO Generator"
+    },
+    body: JSON.stringify({
+      model: "google/gemini-2.0-flash-exp:free",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userPrompt }
+      ],
+      max_tokens: 2048,
+      temperature: 0.8
+    })
+  });
+
+  if (!response.ok) {
+    const errBody = await response.text();
+    throw new Error(`OpenRouter API error (${response.status}): ${errBody}`);
+  }
+
+  const data = await response.json();
+  const text = data.choices?.[0]?.message?.content;
+  if (!text) throw new Error("Empty response from OpenRouter API");
+  return parseJsonResponse(text);
+}
+
+/**
+ * Anthropic Claude — paid, high quality.
  */
 async function callAnthropicAPI(apiKey, userPrompt) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -116,10 +210,7 @@ async function callAnthropicAPI(apiKey, userPrompt) {
   const data = await response.json();
   const text = data.content?.[0]?.text;
   if (!text) throw new Error("Empty response from Anthropic API");
-
-  // Parse JSON — strip any accidental markdown fences
-  const cleaned = text.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "").trim();
-  return JSON.parse(cleaned);
+  return parseJsonResponse(text);
 }
 
 // ── NPC Builder ──────────────────────────────────────────────
@@ -190,19 +281,27 @@ function sanitizeNPC(npc) {
 // ── Main Export ──────────────────────────────────────────────
 
 /**
- * Generate an NPC from a free-text prompt using the Anthropic API.
+ * Generate an NPC from a free-text prompt using the configured LLM provider.
  *
  * @param {object} options
  * @param {string} options.prompt - User's NPC description
  * @returns {Promise<{actor: Actor|null, summary: string}>}
  */
 export async function generateAINpc(options = {}) {
-  const apiKey = game.settings.get(MODULE_ID, "anthropicApiKey");
+  const provider = game.settings.get(MODULE_ID, "aiProvider");
+  const apiKey = game.settings.get(MODULE_ID, "aiApiKey");
+
   if (!apiKey) {
     ui.notifications.error(
       game.i18n.localize("CORIOLIS_AIO.AINPC.NoApiKey")
     );
     return { actor: null, summary: "Error: no API key configured" };
+  }
+
+  const providerDef = PROVIDERS[provider];
+  if (!providerDef) {
+    ui.notifications.error(`Unknown AI provider: ${provider}`);
+    return { actor: null, summary: "Error: unknown provider" };
   }
 
   const prompt = options.prompt?.trim();
@@ -217,9 +316,9 @@ export async function generateAINpc(options = {}) {
 
   let npcData;
   try {
-    npcData = await callAnthropicAPI(apiKey, prompt);
+    npcData = await providerDef.call(apiKey, prompt);
   } catch (err) {
-    console.error(`${MODULE_ID} | AI NPC generation failed:`, err);
+    console.error(`${MODULE_ID} | AI NPC generation failed (${provider}):`, err);
     ui.notifications.error(`AI generation failed: ${err.message}`);
     return { actor: null, summary: `Error: ${err.message}` };
   }
