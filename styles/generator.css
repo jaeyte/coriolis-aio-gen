@@ -343,3 +343,31 @@
   color: var(--coriolis-gold);
   text-shadow: 0 0 8px var(--coriolis-gold-glow);
 }
+
+/* ================================================================
+   ACTOR DIRECTORY SIDEBAR BUTTON
+   ================================================================ */
+
+.coriolis-aio-gen-sidebar-btn {
+  width: 100%;
+  margin: 4px 0;
+  padding: 6px 10px;
+  border: 1px solid var(--coriolis-gold-dim, #a07830);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #191938 0%, #111128 100%);
+  color: var(--coriolis-gold, #d4a84b);
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coriolis-aio-gen-sidebar-btn:hover {
+  border-color: var(--coriolis-gold, #d4a84b);
+  background: linear-gradient(180deg, #252550 0%, #1a1a3a 100%);
+  box-shadow: 0 0 8px rgba(212, 168, 75, 0.35);
+}
+
+.coriolis-aio-gen-sidebar-btn i {
+  margin-right: 5px;
+}
