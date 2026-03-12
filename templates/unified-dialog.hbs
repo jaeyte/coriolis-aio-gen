@@ -35,6 +35,9 @@
     <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'mission')}}active{{/if}}" data-tab="mission">
       <i class="fas fa-scroll"></i> {{localize "CORIOLIS_AIO.Tab.Mission"}}
     </button>
+    <button type="button" class="coriolis-gen-tab {{#if (eq initialTab 'aiNpc')}}active{{/if}}" data-tab="aiNpc">
+      <i class="fas fa-brain"></i> {{localize "CORIOLIS_AIO.Tab.AINPC"}}
+    </button>
   </div>
 
   {{!-- ═══════════════════════════════════════════════
@@ -367,6 +370,18 @@
     </fieldset>
 
     <fieldset class="coriolis-section">
+      <legend><i class="fas fa-star-and-crescent"></i> {{localize "CORIOLIS_AIO.NPC.MysticPowersSection"}}</legend>
+
+      <div class="form-group">
+        <label class="coriolis-checkbox">
+          <input type="checkbox" name="npcMysticPowers" checked />
+          {{localize "CORIOLIS_AIO.NPC.MysticPowers"}}
+        </label>
+        <p class="hint">{{localize "CORIOLIS_AIO.NPC.MysticPowersHint"}}</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="coriolis-section">
       <legend><i class="fas fa-cog"></i> Output</legend>
 
       <div class="form-group">
@@ -465,6 +480,22 @@
           <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
           {{/each}}
         </select>
+      </div>
+    </fieldset>
+  </div>
+
+  {{!-- ═══════════════════════════════════════════════
+       AI NPC PANEL
+       ═══════════════════════════════════════════════ --}}
+  <div class="coriolis-gen-panel {{#unless (eq initialTab 'aiNpc')}}hidden{{/unless}}" data-panel="aiNpc">
+
+    <fieldset class="coriolis-section">
+      <legend><i class="fas fa-brain"></i> {{localize "CORIOLIS_AIO.AINPC.Title"}}</legend>
+
+      <div class="form-group">
+        <label for="aio-ai-prompt">{{localize "CORIOLIS_AIO.AINPC.Prompt"}}</label>
+        <textarea id="aio-ai-prompt" name="aiNpcPrompt" rows="5" placeholder="{{localize "CORIOLIS_AIO.AINPC.PromptPlaceholder"}}"></textarea>
+        <p class="hint">{{localize "CORIOLIS_AIO.AINPC.PromptHint"}}</p>
       </div>
     </fieldset>
   </div>

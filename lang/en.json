@@ -63,5 +63,17 @@
   "CORIOLIS_AIO.Mission.GenerateEncounter": "Generate combat encounter",
   "CORIOLIS_AIO.Mission.GenerateShipEncounter": "Generate ship encounter",
   "CORIOLIS_AIO.Mission.Difficulty": "Encounter Difficulty",
+  "CORIOLIS_AIO.NPC.MysticPowersSection": "Mystic Powers",
+  "CORIOLIS_AIO.NPC.MysticPowers": "Include mystic powers for qualifying archetypes",
+  "CORIOLIS_AIO.NPC.MysticPowersHint": "Mystic archetypes will receive 1-2 random mystic power talents drawn from the compendium.",
+  "CORIOLIS_AIO.Tab.AINPC": "AI NPC",
+  "CORIOLIS_AIO.AINPC.Title": "AI NPC Generator",
+  "CORIOLIS_AIO.AINPC.Prompt": "Describe your NPC",
+  "CORIOLIS_AIO.AINPC.PromptPlaceholder": "e.g. A grizzled Dabaran smuggler who secretly works for the Draconites, armed with a Vulcan pistol and cybernetic eye...",
+  "CORIOLIS_AIO.AINPC.PromptHint": "Describe the NPC you want. The AI will generate a complete actor with stats, gear, talents, and background. Requires an Anthropic API key in module settings.",
+  "CORIOLIS_AIO.AINPC.NoApiKey": "No Anthropic API key configured. Set it in Module Settings → Coriolis AIO Generator.",
+  "CORIOLIS_AIO.AINPC.Generating": "Generating NPC with AI — this may take a few seconds...",
+  "CORIOLIS_AIO.Settings.ApiKey": "Anthropic API Key",
+  "CORIOLIS_AIO.Settings.ApiKeyHint": "Your Anthropic API key for the AI NPC generator. Get one at console.anthropic.com. Stored per-world.",
   "CORIOLIS_AIO.Error.GenerationFailed": "Generation failed. Check the console for details."
 }

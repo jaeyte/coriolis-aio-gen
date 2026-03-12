@@ -13,6 +13,16 @@ const MODULE_ID = "coriolis-aio-gen";
 
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | Initializing Coriolis AIO Generator`);
+
+  // Register module settings
+  game.settings.register(MODULE_ID, "anthropicApiKey", {
+    name: "CORIOLIS_AIO.Settings.ApiKey",
+    hint: "CORIOLIS_AIO.Settings.ApiKeyHint",
+    scope: "world",
+    config: true,
+    type: String,
+    default: ""
+  });
 });
 
 Hooks.once("ready", () => {
