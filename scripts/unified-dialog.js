@@ -21,6 +21,7 @@ import { generateShipEncounter } from "./ship-encounter-generator.js";
 import { generateParty } from "./party-generator.js";
 import { generateQuickNPC } from "./npc-generator.js";
 import { generateMission } from "./mission-generator.js";
+import { generateAINpc } from "./ai-npc-generator.js";
 
 /**
  * Open the unified AIO generator dialog.
@@ -82,6 +83,8 @@ export async function openUnifiedDialog(initialTab = "character") {
                 result = await _generateNPCFromForm(form);
               } else if (genType === "mission") {
                 result = await _generateMissionFromForm(form);
+              } else if (genType === "aiNpc") {
+                result = await _generateAINpcFromForm(form);
               }
               resolve(result);
             } catch (err) {
@@ -215,7 +218,8 @@ function _generateNPCFromForm(form) {
     archetypeKey: form.npcArchetype.value || undefined,
     factionKey: form.npcFaction.value || undefined,
     name: form.npcName.value || undefined,
-    createActor: form.npcCreateActor.checked
+    createActor: form.npcCreateActor.checked,
+    includeMysticPowers: form.npcMysticPowers.checked
   });
 }
 
@@ -230,6 +234,12 @@ function _generateMissionFromForm(form) {
     partySize: parseInt(form.missionPartySize.value) || 4,
     partyXP: parseInt(form.missionPartyXP.value) || 0,
     difficulty: form.missionDifficulty.value
+  });
+}
+
+function _generateAINpcFromForm(form) {
+  return generateAINpc({
+    prompt: form.aiNpcPrompt.value || ""
   });
 }
 

@@ -21,42 +21,6 @@
 }
 
 /* ================================================================
-   SIDEBAR BUTTON
-   ================================================================ */
-
-.coriolis-aio-generate-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  width: 100%;
-  margin-top: 4px;
-  padding: 5px 8px;
-  font-size: 0.8em;
-  font-weight: 600;
-  line-height: 1.3;
-  white-space: nowrap;
-  cursor: pointer;
-  border: 1px solid var(--coriolis-gold-dim);
-  border-radius: 3px;
-  background: linear-gradient(180deg, #1e1e40 0%, #14142c 100%);
-  color: var(--coriolis-gold);
-  transition: all 0.2s ease;
-  text-shadow: 0 0 6px var(--coriolis-gold-glow);
-}
-
-.coriolis-aio-generate-btn:hover {
-  background: linear-gradient(180deg, #2a2a55 0%, #1a1a38 100%);
-  border-color: var(--coriolis-gold);
-  box-shadow: 0 0 8px var(--coriolis-gold-glow), inset 0 0 12px rgba(212, 168, 75, 0.08);
-  color: #f0d080;
-}
-
-.coriolis-aio-generate-btn i {
-  font-size: 1em;
-}
-
-/* ================================================================
    DIALOG WINDOW FRAME
    ================================================================ */
 
@@ -270,6 +234,31 @@
 /* Number input */
 .coriolis-aio-gen-dialog input[type="number"] {
   width: 100%;
+}
+
+/* Textarea */
+.coriolis-aio-gen-dialog textarea {
+  padding: 6px 8px;
+  border: 1px solid var(--coriolis-border);
+  border-radius: 3px;
+  background: var(--coriolis-void);
+  color: var(--coriolis-text);
+  font-size: 0.88em;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.coriolis-aio-gen-dialog textarea:focus {
+  outline: none;
+  border-color: var(--coriolis-gold-dim);
+  box-shadow: 0 0 6px var(--coriolis-gold-glow);
+}
+
+.coriolis-aio-gen-dialog textarea::placeholder {
+  color: var(--coriolis-text-dim);
+  font-style: italic;
 }
 
 /* Checkbox */

@@ -45,6 +45,7 @@ export const NPC_ARCHETYPES = {
     label: "Mystic",
     keyAttribute: "wits",
     keySkills: ["mysticpowers", "observation", "culture"],
+    mysticPowers: true,
     description: "A seer, healer, or hermit touched by the Icons — or something darker.",
     weapons: ["staff"],
     gear: ["prayerBeads", "incense"]

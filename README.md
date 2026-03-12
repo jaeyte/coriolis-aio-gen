@@ -1,6 +1,6 @@
 # Coriolis AIO Generator
 
-A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) that provides seven generators in a single tabbed dialog — characters, encounters, ships, ship encounters, parties, NPCs, and missions.
+A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) that provides eight generators in a single tabbed dialog — characters, encounters, ships, ship encounters, parties, NPCs, AI-powered NPCs, and missions.
 
 ## Features at a Glance
 
@@ -11,15 +11,18 @@ A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) tha
 | **Ship** | Ship actor with modules | 9 ship classes, 18+ modules, functional weapons with damage/range/crit |
 | **Ship Encounter** | Enemy ship + crew actors | 10 enemy ships, 9 templates, salvage loot, boarding party linking |
 | **Party** | 3–6 characters in a folder | Crew position assignment via concept affinity matching |
-| **Quick NPC** | Actor or journal entry | 10 archetypes, 10 factions, personality/motivation/quirk, gear loadouts |
+| **Quick NPC** | Actor or journal entry | 10 archetypes, 10 factions, personality/motivation/quirk, gear loadouts, mystic powers |
+| **AI NPC** | Full NPC actor | Free-text prompt to complete actor via LLM (Gemini, OpenRouter, or Anthropic) |
 | **Mission** | Journal briefing + NPCs | 10 templates, patron/antagonist NPCs, linked encounters, reward scaling |
 
 ## Getting Started
 
 1. Install the module (see [Installation](#installation))
 2. Enable it in your world's Module Management
-3. Click the **AIO Generator** button in the Actors sidebar
+3. Open the Actors sidebar and click the **AIO Generator** entry in the header controls dropdown
 4. Pick a tab, configure options, and click **Generate**
+
+For the **AI NPC** tab, configure an API key in **Module Settings > Coriolis AIO Generator** first.
 
 ---
 
@@ -127,7 +130,36 @@ Creates narrative NPCs as actors or journal entries:
 - **10 factions** — Consortium, Legion, Church, Syndicate, Nomad Federation, Draconites, Ahlam's Temple, Free League, Zenithian Hegemony, Independent
 - **20 personality traits**, **15 motivations**, **20 quirks** for rich characterization
 - **Gear loadouts** per archetype — weapons, armor, and equipment resolved from compendiums
+- **Mystic powers** — qualifying archetypes (Mystic) receive 1–2 random mystic power talents from the compendium
 - Actor output includes simplified attributes/skills; journal output provides a narrative description
+
+---
+
+## AI NPC Generator
+
+Creates complete NPC actors from a free-text description using an LLM:
+
+- Describe any NPC in plain language and the AI generates a full actor with attributes, skills, talents, gear, and narrative background
+- **Stats validation** — attributes are clamped to 2–5 (total 14), skills to 0–5, following Coriolis rules
+- **Compendium enrichment** — AI-generated items are matched against installed compendiums for proper icons and data
+- **Mystic powers** supported for supernatural NPCs
+
+### Supported Providers
+
+| Provider | Cost | Model |
+|---|---|---|
+| **Google Gemini** | Free tier (15 RPM, 1M tokens/day) | gemini-2.0-flash |
+| **OpenRouter** | Free models available | google/gemini-2.0-flash-exp:free |
+| **Anthropic** | Paid | claude-sonnet-4-20250514 |
+
+### Setup
+
+1. Go to **Module Settings > Coriolis AIO Generator**
+2. Select your **AI Provider**
+3. Enter your **API Key**:
+   - Gemini: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+   - OpenRouter: [openrouter.ai/keys](https://openrouter.ai/keys)
+   - Anthropic: [console.anthropic.com](https://console.anthropic.com)
 
 ---
 
@@ -190,14 +222,15 @@ Resolution priority:
 coriolis-aio-gen/
 ├── module.json
 ├── scripts/
-│   ├── main.js                      # Entry point, hooks, sidebar button
-│   ├── unified-dialog.js            # Tabbed dialog with all 7 generators
+│   ├── main.js                      # Entry point, hooks, header controls
+│   ├── unified-dialog.js            # Tabbed dialog with all 8 generators
 │   ├── generator.js                 # Character generation
 │   ├── encounter-generator.js       # Encounter generation with scaling
 │   ├── ship-generator.js            # Ship generation with modules/weapons
 │   ├── ship-encounter-generator.js  # Ship encounter + crew + salvage
 │   ├── party-generator.js           # Party generation with crew roles
 │   ├── npc-generator.js             # Quick NPC generation
+│   ├── ai-npc-generator.js          # AI-powered NPC generation via LLM
 │   ├── mission-generator.js         # Mission briefing generation
 │   ├── compendium-resolver.js       # Compendium-first item resolution
 │   └── data/
@@ -218,7 +251,7 @@ coriolis-aio-gen/
 ├── templates/
 │   └── unified-dialog.hbs           # Tabbed dialog template
 ├── styles/
-│   └── generator.css                # Themed dialog and button styles
+│   └── generator.css                # Themed dialog styles
 └── lang/
     └── en.json                      # English localization
 ```
