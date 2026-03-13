@@ -107,7 +107,7 @@ export const SHIP_CLASSES = {
       "turret", "armorPlating", "stasisHold", "dockingClamps",
       "ecm", "laboratory", "pointDefense", "miningLaser"
     ]
-  }
+  },
   warship: {
     label: "Warship",
     description: "A purpose-built military vessel bristling with weapons. The backbone of any fleet.",

@@ -60,30 +60,34 @@ Hooks.once("ready", () => {
 /* ---------- Actor Directory sidebar button ---------- */
 
 Hooks.on("renderActorDirectory", (app, html) => {
-  if (!game.user.isGM && !game.user.can("ACTOR_CREATE")) return;
+  if (!game.user.isGM && !game.user.hasPermission("ACTOR_CREATE")) return;
 
-  // Avoid injecting duplicate buttons on re-renders
+  // Foundry v13 passes a plain HTMLElement; earlier versions may pass jQuery
   const container = html instanceof jQuery ? html[0] : html;
+
+  // Avoid injecting duplicate buttons on re-renders (ApplicationV2 partial renders)
   if (container.querySelector(".coriolis-aio-gen-sidebar-btn")) return;
 
   const btn = document.createElement("button");
   btn.type = "button";
   btn.classList.add("coriolis-aio-gen-sidebar-btn");
-  btn.innerHTML = `<i class="fa-solid fa-dice-d20"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Generate")}`;
+  btn.innerHTML = `<i class="fas fa-dice-d20"></i> ${game.i18n.localize("CORIOLIS_AIO.Button.Generate")}`;
   btn.addEventListener("click", (e) => {
     e.preventDefault();
     openUnifiedDialog();
   });
 
-  // Try multiple selectors to find the right insertion point in v13
-  const headerActions = container.querySelector(".header-actions")
-    ?? container.querySelector(".directory-header .action-buttons")
-    ?? container.querySelector(".directory-header");
+  // Try multiple selectors for Foundry v13 (ApplicationV2) and earlier versions.
+  // v13 uses .header-actions or .action-buttons for its button container;
+  // older versions use .directory-header.
+  const actionBar = container.querySelector(".header-actions")
+    || container.querySelector(".action-buttons")
+    || container.querySelector(".directory-header");
 
-  if (headerActions) {
-    headerActions.appendChild(btn);
+  if (actionBar) {
+    actionBar.insertAdjacentElement("afterend", btn);
   } else {
-    // Fallback: prepend to the container itself
+    // Last resort: insert at the top of the container
     container.prepend(btn);
   }
 
