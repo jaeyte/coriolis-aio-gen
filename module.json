@@ -2,7 +2,7 @@
   "id": "coriolis-aio-gen",
   "title": "Coriolis AIO Generator",
   "description": "All-in-one generator suite for Coriolis: The Third Horizon. Create characters, combat encounters, ships with functional weapons, ship encounters with crew, full parties, quick NPCs, and complete mission briefings — all from a single dialog.",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -42,3 +42,4 @@
   "manifest": "https://raw.githubusercontent.com/jaeyte/coriolis-aio-gen/main/module.json",
   "download": "https://github.com/jaeyte/coriolis-aio-gen/archive/refs/heads/main.zip"
 }
+
