@@ -340,7 +340,7 @@ export const ENEMY_GEAR = {
   incense:        { name: "Ritual Incense",  type: "gear", system: { weight: "T", techTier: "P" } },
   vulcanAmmo:     { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O" } },
   thermCells:     { name: "Therm Cells",       type: "gear", system: { weight: "T", techTier: "A" } },
-  grenade:        { name: "Grenade",           type: "gear", system: { weight: "N", techTier: "O", quantity: 1 } },
+  grenade:        { name: "Grenade",           type: "weapon", system: { damage: 3, range: "short", melee: false, weight: "N", techTier: "O", bonus: 0, initiative: -1, blast: true } },
   medpatch:       { name: "Medpatch",          type: "gear", system: { weight: "T", techTier: "O", quantity: 1 } },
   stimpak:        { name: "Stimpak",           type: "gear", system: { weight: "T", techTier: "A", quantity: 1 } },
   smokeBomb:      { name: "Smoke Bomb",        type: "gear", system: { weight: "T", techTier: "O", quantity: 2 } }
