@@ -13,8 +13,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "empathy",
     keySkills: ["manipulation", "culture", "observation"],
     description: "A trader hawking wares in a bazaar or negotiating bulk contracts.",
-    weapons: ["vulcanCricket"],
+    weaponPools: { close: ["knife"], short: ["vulcanCricket", "vulcanPistol"] },
     gear: ["communicator", "computerTablet"],
+    optionalGear: ["medpatch"],
     talents: ["languageknowledge", "judgeofcharacter"]
   },
   informant: {
@@ -22,8 +23,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "wits",
     keySkills: ["infiltration", "observation", "manipulation"],
     description: "Someone with ears everywhere and information for sale.",
-    weapons: ["vulcanCricket", "knife"],
+    weaponPools: { close: ["knife", "poisonedBlade"], short: ["vulcanCricket"] },
     gear: ["communicator", "lockPicks"],
+    optionalGear: ["smokeBomb", "medpatch"],
     talents: ["informant", "camouflage"]
   },
   bureaucrat: {
@@ -31,8 +33,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "empathy",
     keySkills: ["manipulation", "culture", "command"],
     description: "A functionary who controls access to permits, docking rights, or restricted zones.",
-    weapons: [],
+    weaponPools: { short: ["vulcanCricket"] },
     gear: ["communicator", "computerTablet"],
+    optionalGear: [],
     talents: ["faction_standing", "languageknowledge"]
   },
   crimeBoss: {
@@ -40,9 +43,10 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "empathy",
     keySkills: ["command", "manipulation", "rangedcombat"],
     description: "A shadowy figure who runs the local underworld with charm and violence.",
-    weapons: ["vulcanPistol", "knife"],
+    weaponPools: { close: ["knife", "saber"], short: ["vulcanPistol", "thermPistol"] },
     armor: "lightVest",
     gear: ["communicator", "tabak"],
+    optionalGear: ["grenade", "stimpak"],
     talents: ["intimidating", "quickdraw"]
   },
   mystic: {
@@ -51,8 +55,9 @@ export const NPC_ARCHETYPES = {
     keySkills: ["mysticpowers", "observation", "culture"],
     mysticPowers: true,
     description: "A seer, healer, or hermit touched by the Icons — or something darker.",
-    weapons: ["staff"],
+    weaponPools: { close: ["staff", "ritualDagger"] },
     gear: ["prayerBeads", "incense"],
+    optionalGear: ["medpatch"],
     talents: ["thirdeye"]
   },
   scholar: {
@@ -60,8 +65,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "wits",
     keySkills: ["science", "culture", "datadjinn"],
     description: "An academic researching ancient texts, xenobiology, or portal mechanics.",
-    weapons: [],
+    weaponPools: { close: ["knife"] },
     gear: ["communicator", "computerTablet"],
+    optionalGear: ["medpatch"],
     talents: ["researcher", "hacker"]
   },
   factionLeader: {
@@ -69,9 +75,10 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "empathy",
     keySkills: ["command", "manipulation", "observation"],
     description: "A charismatic or ruthless figure at the head of a local faction cell.",
-    weapons: ["vulcanPistol", "knife"],
+    weaponPools: { close: ["saber", "knife"], short: ["vulcanPistol", "thermPistol"], long: ["vulcanCarbine", "thermRifle"] },
     armor: "lightVest",
     gear: ["communicator"],
+    optionalGear: ["grenade", "stimpak", "medpatch"],
     talents: ["intimidating", "combatveteran"]
   },
   technician: {
@@ -79,8 +86,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "wits",
     keySkills: ["technology", "science", "dexterity"],
     description: "A skilled mechanic, engineer, or shipwright who can fix or build anything.",
-    weapons: ["knife"],
+    weaponPools: { close: ["knife", "stunBaton"] },
     gear: ["communicator", "medkit"],
+    optionalGear: ["medpatch", "stimpak"],
     talents: ["mechanic", "fieldmedicurg"]
   },
   smuggler: {
@@ -88,9 +96,10 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "agility",
     keySkills: ["pilot", "infiltration", "manipulation"],
     description: "A daring courier who moves contraband past customs and blockades.",
-    weapons: ["vulcanPistol", "knife"],
+    weaponPools: { close: ["knife"], short: ["vulcanPistol", "vulcanCricket"] },
     armor: "lightVest",
     gear: ["communicator", "lockPicks"],
+    optionalGear: ["smokeBomb", "medpatch", "grenade"],
     talents: ["quickdraw", "rugged"]
   },
   pilgrim: {
@@ -98,8 +107,9 @@ export const NPC_ARCHETYPES = {
     keyAttribute: "empathy",
     keySkills: ["culture", "survival", "medicurgy"],
     description: "A devout traveler on a sacred journey across the Third Horizon.",
-    weapons: ["staff"],
+    weaponPools: { close: ["staff"] },
     gear: ["prayerBeads", "medkit"],
+    optionalGear: ["medpatch"],
     talents: ["blessing", "lastrites"]
   }
 };

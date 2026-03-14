@@ -75,6 +75,7 @@
   "CORIOLIS_AIO.AINPC.Generating": "Generating NPC with AI — this may take a few seconds...",
   "CORIOLIS_AIO.AINPC.GeneratingTitle": "Consulting the Icons...",
   "CORIOLIS_AIO.AINPC.GeneratingMessage": "The AI is forging your NPC from the dark between the stars.",
+  "CORIOLIS_AIO.NPC.Difficulty": "Difficulty",
   "CORIOLIS_AIO.NPC.Count": "Number of NPCs",
   "CORIOLIS_AIO.NPC.CountHint": "Generate multiple NPCs at once (1-10). Each will get a unique random name.",
   "CORIOLIS_AIO.Settings.Provider": "AI Provider",

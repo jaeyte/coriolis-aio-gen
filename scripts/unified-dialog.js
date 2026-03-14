@@ -218,6 +218,7 @@ async function _generateNPCFromForm(form) {
   const baseOptions = {
     archetypeKey: form.npcArchetype.value || undefined,
     factionKey: form.npcFaction.value || undefined,
+    difficulty: form.npcDifficulty.value || "normal",
     createActor: form.npcCreateActor.checked,
     includeMysticPowers: form.npcMysticPowers.checked
   };

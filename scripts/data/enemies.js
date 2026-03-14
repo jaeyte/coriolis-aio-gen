@@ -308,6 +308,7 @@ export const ENEMY_WEAPONS = {
   shadowTouch:   { name: "Shadow Touch",    type: "weapon", system: { damage: 3, range: "contact", melee: true, weight: "L", techTier: "P", bonus: 2, initiative: 2 } },
   darkBlast:     { name: "Dark Blast",      type: "weapon", system: { damage: 4, range: "short",   melee: false, weight: "L", techTier: "P", bonus: 2, initiative: 1 } },
   thermPistol:   { name: "Therm Pistol",    type: "weapon", system: { damage: 3, range: "short",   melee: false, weight: "L", techTier: "A", bonus: 2, initiative: 0 } },
+  thermRifle:    { name: "Therm Rifle",     type: "weapon", system: { damage: 4, range: "long",    melee: false, weight: "N", techTier: "A", bonus: 2, initiative: -1 } },
   stunBaton:     { name: "Stun Baton",      type: "weapon", system: { damage: 2, range: "contact", melee: true,  weight: "N", techTier: "O", bonus: 1, initiative: 0 } },
   ritualDagger:  { name: "Ritual Dagger",   type: "weapon", system: { damage: 2, range: "contact", melee: true,  weight: "L", techTier: "O", bonus: 1, initiative: 1 } }
 };
@@ -338,7 +339,11 @@ export const ENEMY_GEAR = {
   prayerBeads:    { name: "Prayer Beads",    type: "gear", system: { weight: "T", techTier: "P" } },
   incense:        { name: "Ritual Incense",  type: "gear", system: { weight: "T", techTier: "P" } },
   vulcanAmmo:     { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O" } },
-  thermCells:     { name: "Therm Cells",       type: "gear", system: { weight: "T", techTier: "A" } }
+  thermCells:     { name: "Therm Cells",       type: "gear", system: { weight: "T", techTier: "A" } },
+  grenade:        { name: "Grenade",           type: "gear", system: { weight: "N", techTier: "O", quantity: 1 } },
+  medpatch:       { name: "Medpatch",          type: "gear", system: { weight: "T", techTier: "O", quantity: 1 } },
+  stimpak:        { name: "Stimpak",           type: "gear", system: { weight: "T", techTier: "A", quantity: 1 } },
+  smokeBomb:      { name: "Smoke Bomb",        type: "gear", system: { weight: "T", techTier: "O", quantity: 2 } }
 };
 
 export const ENEMY_FACTIONS = {

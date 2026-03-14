@@ -367,6 +367,15 @@
         <label for="aio-npc-name">{{localize "CORIOLIS_AIO.Dialog.Name"}}</label>
         <input type="text" id="aio-npc-name" name="npcName" placeholder="{{localize "CORIOLIS_AIO.Dialog.NamePlaceholder"}}" />
       </div>
+
+      <div class="form-group">
+        <label for="aio-npc-difficulty">{{localize "CORIOLIS_AIO.NPC.Difficulty"}}</label>
+        <select id="aio-npc-difficulty" name="npcDifficulty">
+          {{#each difficulties}}
+          <option value="{{@key}}" {{#if this.default}}selected{{/if}}>{{this.label}}</option>
+          {{/each}}
+        </select>
+      </div>
     </fieldset>
 
     <fieldset class="coriolis-section">
