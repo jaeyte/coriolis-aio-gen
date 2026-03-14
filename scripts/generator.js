@@ -317,6 +317,32 @@ export async function generateCharacter(options = {}) {
     ];
     const resolvedGear = await resolveItems(allGearItems);
     embeddedItems.push(...resolvedGear);
+
+    // Ammunition for ranged starting weapons
+    if (gearData.weapons && gearData.weapons.length > 0) {
+      const AMMO_MAP = {
+        "Vulcan Cricket":  { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O", quantity: 1 } },
+        "Vulcan Pistol":   { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O", quantity: 1 } },
+        "Vulcan Carbine":  { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O", quantity: 2 } },
+        "Therm Pistol":    { name: "Therm Cells",       type: "gear", system: { weight: "T", techTier: "A", quantity: 1 } }
+      };
+      // Deduplicate ammo by name, combining quantities
+      const ammoNeeded = {};
+      for (const w of gearData.weapons) {
+        const mapping = AMMO_MAP[w.name];
+        if (mapping) {
+          if (!ammoNeeded[mapping.name]) {
+            ammoNeeded[mapping.name] = { ...mapping, system: { ...mapping.system } };
+          } else {
+            ammoNeeded[mapping.name].system.quantity += mapping.system.quantity;
+          }
+        }
+      }
+      for (const ammoData of Object.values(ammoNeeded)) {
+        const resolved = await resolveItems([ammoData]);
+        embeddedItems.push(...resolved);
+      }
+    }
   }
 
   // 10. Create the actor

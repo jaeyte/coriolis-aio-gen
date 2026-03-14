@@ -14,7 +14,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["manipulation", "culture", "observation"],
     description: "A trader hawking wares in a bazaar or negotiating bulk contracts.",
     weapons: ["vulcanCricket"],
-    gear: ["communicator", "computerTablet"]
+    gear: ["communicator", "computerTablet"],
+    talents: ["languageknowledge", "judgeofcharacter"]
   },
   informant: {
     label: "Informant",
@@ -22,7 +23,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["infiltration", "observation", "manipulation"],
     description: "Someone with ears everywhere and information for sale.",
     weapons: ["vulcanCricket", "knife"],
-    gear: ["communicator", "lockPicks"]
+    gear: ["communicator", "lockPicks"],
+    talents: ["informant", "camouflage"]
   },
   bureaucrat: {
     label: "Bureaucrat",
@@ -30,7 +32,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["manipulation", "culture", "command"],
     description: "A functionary who controls access to permits, docking rights, or restricted zones.",
     weapons: [],
-    gear: ["communicator", "computerTablet"]
+    gear: ["communicator", "computerTablet"],
+    talents: ["faction_standing", "languageknowledge"]
   },
   crimeBoss: {
     label: "Crime Boss",
@@ -39,7 +42,8 @@ export const NPC_ARCHETYPES = {
     description: "A shadowy figure who runs the local underworld with charm and violence.",
     weapons: ["vulcanPistol", "knife"],
     armor: "lightVest",
-    gear: ["communicator", "tabak"]
+    gear: ["communicator", "tabak"],
+    talents: ["intimidating", "quickdraw"]
   },
   mystic: {
     label: "Mystic",
@@ -48,7 +52,8 @@ export const NPC_ARCHETYPES = {
     mysticPowers: true,
     description: "A seer, healer, or hermit touched by the Icons — or something darker.",
     weapons: ["staff"],
-    gear: ["prayerBeads", "incense"]
+    gear: ["prayerBeads", "incense"],
+    talents: ["thirdeye"]
   },
   scholar: {
     label: "Scholar",
@@ -56,7 +61,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["science", "culture", "datadjinn"],
     description: "An academic researching ancient texts, xenobiology, or portal mechanics.",
     weapons: [],
-    gear: ["communicator", "computerTablet"]
+    gear: ["communicator", "computerTablet"],
+    talents: ["researcher", "hacker"]
   },
   factionLeader: {
     label: "Faction Leader",
@@ -65,7 +71,8 @@ export const NPC_ARCHETYPES = {
     description: "A charismatic or ruthless figure at the head of a local faction cell.",
     weapons: ["vulcanPistol", "knife"],
     armor: "lightVest",
-    gear: ["communicator"]
+    gear: ["communicator"],
+    talents: ["intimidating", "combatveteran"]
   },
   technician: {
     label: "Technician",
@@ -73,7 +80,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["technology", "science", "dexterity"],
     description: "A skilled mechanic, engineer, or shipwright who can fix or build anything.",
     weapons: ["knife"],
-    gear: ["communicator", "medkit"]
+    gear: ["communicator", "medkit"],
+    talents: ["mechanic", "fieldmedicurg"]
   },
   smuggler: {
     label: "Smuggler",
@@ -82,7 +90,8 @@ export const NPC_ARCHETYPES = {
     description: "A daring courier who moves contraband past customs and blockades.",
     weapons: ["vulcanPistol", "knife"],
     armor: "lightVest",
-    gear: ["communicator", "lockPicks"]
+    gear: ["communicator", "lockPicks"],
+    talents: ["quickdraw", "rugged"]
   },
   pilgrim: {
     label: "Pilgrim",
@@ -90,7 +99,8 @@ export const NPC_ARCHETYPES = {
     keySkills: ["culture", "survival", "medicurgy"],
     description: "A devout traveler on a sacred journey across the Third Horizon.",
     weapons: ["staff"],
-    gear: ["prayerBeads", "medkit"]
+    gear: ["prayerBeads", "medkit"],
+    talents: ["blessing", "lastrites"]
   }
 };
 
@@ -177,4 +187,47 @@ export const QUIRKS = [
   "Smells faintly of engine grease and incense",
   "Has a pet — a small, iridescent lizard from Kua",
   "Speaks with a thick Dabaran accent"
+];
+
+// ── Physical Descriptors ───────────────────────────────────
+
+export const PHYSICAL_BUILDS = [
+  "Tall and lean",
+  "Short and stocky",
+  "Broad-shouldered and muscular",
+  "Wiry and nimble",
+  "Average build, unremarkable frame",
+  "Heavyset and imposing",
+  "Slender and graceful",
+  "Compact and athletic",
+  "Gaunt and hollow-cheeked",
+  "Lanky with long limbs"
+];
+
+export const AGE_RANGES = [
+  "Young, barely into adulthood",
+  "In their mid-twenties",
+  "Early thirties, in their prime",
+  "Middle-aged, lines of experience on their face",
+  "Weathered, somewhere past fifty",
+  "Elderly but sharp-eyed",
+  "Ageless — hard to pin down exactly"
+];
+
+export const DISTINGUISHING_FEATURES = [
+  "A prominent scar across the left cheek",
+  "Striking heterochromatic eyes",
+  "A cybernetic implant visible at the temple",
+  "Ritual tattoos along the jawline",
+  "A crooked nose, broken and reset more than once",
+  "Unusually pale skin, almost translucent",
+  "Dark skin weathered by solar radiation",
+  "A missing finger on the right hand",
+  "A shaved head with intricate Icon markings",
+  "Deep-set eyes that seem to see too much",
+  "An ornate earring dangling from one ear",
+  "Calloused hands that speak of hard labor",
+  "A serene, almost unsettling calm to their expression",
+  "A burn mark on the back of their neck",
+  "Bright, alert eyes constantly scanning the surroundings"
 ];

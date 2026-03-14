@@ -46,6 +46,10 @@ ITEMS: Provide realistic Coriolis gear. Each item needs name, type, and system f
 MYSTIC POWERS: If the NPC is mystical/supernatural, include talents with category "mysticalpowers".
 Available powers: Clairvoyant, Telekinesis, Telepathy, Premonition, Mind Walker.
 
+AMMUNITION: Always include ammunition as gear items for any ranged weapons. For example:
+- "Vulcan Ammunition" (quantity 1-2) for Vulcan Cricket, Vulcan Pistol, or Vulcan Carbine
+- "Therm Cells" (quantity 1) for Therm Pistol or Therm Rifle
+
 BIO fields:
 - origin: a system/planet (Kua, Algol, Dabaran, Sadaal, Zalos, Mira, Coriolis station, etc.)
 - upbringing: Plebeian, Stationary, or Privileged
@@ -85,6 +89,14 @@ Respond with ONLY valid JSON matching this exact structure (no markdown, no expl
   "notes": "A short narrative summary of who this NPC is and their role in the story."
 }`;
 
+// ── Default models per provider ─────────────────────────────
+
+const DEFAULT_MODELS = {
+  gemini: "gemini-2.5-flash",
+  openrouter: "google/gemini-2.5-flash:free",
+  anthropic: "claude-sonnet-4-6"
+};
+
 // ── Provider Definitions ─────────────────────────────────────
 
 const PROVIDERS = {
@@ -102,47 +114,128 @@ const PROVIDERS = {
   }
 };
 
-// ── API Callers ──────────────────────────────────────────────
+// ── API Helpers ──────────────────────────────────────────────
 
 /**
  * Parse LLM text response into JSON, stripping markdown fences.
+ * Provides user-friendly error if the AI returns malformed data.
  */
 function parseJsonResponse(text) {
-  const cleaned = text.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "").trim();
-  return JSON.parse(cleaned);
+  // Strip markdown code fences and any leading/trailing whitespace
+  let cleaned = text.trim();
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
+
+  // Some models wrap in extra text; try to extract the first { ... } block
+  if (!cleaned.startsWith("{")) {
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
+    if (start !== -1 && end > start) {
+      cleaned = cleaned.substring(start, end + 1);
+    }
+  }
+
+  try {
+    return JSON.parse(cleaned);
+  } catch (parseErr) {
+    console.error(`${MODULE_ID} | Failed to parse AI response as JSON:`, cleaned);
+    throw new Error(
+      "The AI returned invalid data that couldn't be parsed. " +
+      "This sometimes happens — please try again. " +
+      `(Parse error: ${parseErr.message})`
+    );
+  }
 }
 
 /**
- * Google Gemini — free tier: 15 RPM, 1M tokens/day, 32k context.
+ * Get the configured AI model, falling back to the default for the provider.
+ */
+function getModel(provider) {
+  try {
+    const custom = game.settings.get(MODULE_ID, "aiModel");
+    if (custom && custom.trim()) return custom.trim();
+  } catch { /* setting not registered yet, use default */ }
+  return DEFAULT_MODELS[provider] || DEFAULT_MODELS.gemini;
+}
+
+/**
+ * Retry wrapper for rate-limited (429) API calls.
+ * Retries up to maxRetries times with exponential backoff.
+ */
+async function withRetry(fn, { maxRetries = 2, baseDelayMs = 3000 } = {}) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      const is429 = err.message && err.message.includes("429");
+      if (is429 && attempt < maxRetries) {
+        const delay = baseDelayMs * Math.pow(2, attempt);
+        console.warn(`${MODULE_ID} | Rate limited (429), retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
+        await new Promise(r => setTimeout(r, delay));
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
+// ── API Callers ──────────────────────────────────────────────
+
+/**
+ * Google Gemini — free tier: 10 RPM, 250 RPD, 250k TPM.
  * Uses the generativelanguage.googleapis.com REST API.
  */
 async function callGeminiAPI(apiKey, userPrompt) {
-  const model = "gemini-2.0-flash";
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const model = getModel("gemini");
+  return withRetry(async () => {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents: [{ parts: [{ text: userPrompt }] }],
-      generationConfig: {
-        temperature: 0.8,
-        maxOutputTokens: 2048,
-        responseMimeType: "application/json"
+    let response;
+    try {
+      response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: [{ parts: [{ text: userPrompt }] }],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 2048,
+            responseMimeType: "application/json"
+          }
+        })
+      });
+    } catch (networkErr) {
+      throw new Error(`Network error connecting to Gemini API: ${networkErr.message}. Check your internet connection.`);
+    }
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      if (response.status === 400) {
+        throw new Error(`Gemini API error (400 Bad Request): The API key may be invalid or the request was malformed. Details: ${errBody}`);
+      } else if (response.status === 403) {
+        throw new Error(`Gemini API error (403 Forbidden): Your API key does not have access. Ensure you have enabled the Generative Language API in Google Cloud Console. Details: ${errBody}`);
+      } else if (response.status === 429) {
+        throw new Error(`Gemini API rate limit reached (429). Free tier allows 10 requests/min and 250 requests/day. Retrying...`);
+      } else if (response.status === 404) {
+        throw new Error(`Gemini API error (404 Not Found): The model '${model}' was not found. Check the model name in module settings. Details: ${errBody}`);
       }
-    })
+      throw new Error(`Gemini API error (${response.status}): ${errBody}`);
+    }
+
+    const data = await response.json();
+
+    // Check for blocked content or empty candidates
+    if (data.promptFeedback?.blockReason) {
+      throw new Error(`Gemini blocked the request: ${data.promptFeedback.blockReason}. Try rephrasing the NPC description.`);
+    }
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      const finishReason = data.candidates?.[0]?.finishReason;
+      throw new Error(`Empty response from Gemini API${finishReason ? ` (finish reason: ${finishReason})` : ''}. Try simplifying the prompt.`);
+    }
+    return parseJsonResponse(text);
   });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`Gemini API error (${response.status}): ${errBody}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Empty response from Gemini API");
-  return parseJsonResponse(text);
 }
 
 /**
@@ -150,67 +243,103 @@ async function callGeminiAPI(apiKey, userPrompt) {
  * Uses the OpenAI-compatible chat completions endpoint.
  */
 async function callOpenRouterAPI(apiKey, userPrompt) {
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`,
-      "HTTP-Referer": window.location.href,
-      "X-Title": "Coriolis AIO Generator"
-    },
-    body: JSON.stringify({
-      model: "google/gemini-2.0-flash-exp:free",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: userPrompt }
-      ],
-      max_tokens: 2048,
-      temperature: 0.8
-    })
+  const model = getModel("openrouter");
+  return withRetry(async () => {
+    let response;
+    try {
+      response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+          "HTTP-Referer": window.location.href,
+          "X-Title": "Coriolis AIO Generator"
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userPrompt }
+          ],
+          max_tokens: 2048,
+          temperature: 0.8
+        })
+      });
+    } catch (networkErr) {
+      throw new Error(`Network error connecting to OpenRouter: ${networkErr.message}. Check your internet connection.`);
+    }
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      if (response.status === 401) {
+        throw new Error(`OpenRouter API error (401 Unauthorized): Invalid API key. Get one at openrouter.ai/keys. Details: ${errBody}`);
+      } else if (response.status === 402) {
+        throw new Error(`OpenRouter API error (402): Insufficient credits. Add credits at openrouter.ai or switch to a free model. Details: ${errBody}`);
+      } else if (response.status === 429) {
+        throw new Error(`OpenRouter rate limit reached (429). Please wait and try again.`);
+      } else if (response.status === 404) {
+        throw new Error(`OpenRouter API error (404): Model '${model}' not found. Check the model name in module settings. Details: ${errBody}`);
+      }
+      throw new Error(`OpenRouter API error (${response.status}): ${errBody}`);
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content;
+    if (!text) throw new Error("Empty response from OpenRouter API. The model may not have produced valid output — try again.");
+    return parseJsonResponse(text);
   });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`OpenRouter API error (${response.status}): ${errBody}`);
-  }
-
-  const data = await response.json();
-  const text = data.choices?.[0]?.message?.content;
-  if (!text) throw new Error("Empty response from OpenRouter API");
-  return parseJsonResponse(text);
 }
 
 /**
  * Anthropic Claude — paid, high quality.
  */
 async function callAnthropicAPI(apiKey, userPrompt) {
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 2048,
-      system: SYSTEM_PROMPT,
-      messages: [
-        { role: "user", content: userPrompt }
-      ]
-    })
+  const model = getModel("anthropic");
+  return withRetry(async () => {
+    let response;
+    try {
+      response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true"
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 2048,
+          system: SYSTEM_PROMPT,
+          messages: [
+            { role: "user", content: userPrompt }
+          ]
+        })
+      });
+    } catch (networkErr) {
+      throw new Error(`Network error connecting to Anthropic API: ${networkErr.message}. Check your internet connection.`);
+    }
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      if (response.status === 401) {
+        throw new Error(`Anthropic API error (401 Unauthorized): Invalid API key. Get one at console.anthropic.com. Details: ${errBody}`);
+      } else if (response.status === 403) {
+        throw new Error(`Anthropic API error (403 Forbidden): Your API key does not have access to the requested model. Details: ${errBody}`);
+      } else if (response.status === 429) {
+        throw new Error(`Anthropic rate limit reached (429). Please wait and try again.`);
+      } else if (response.status === 404) {
+        throw new Error(`Anthropic API error (404): Model '${model}' not found. Check the model name in module settings. Details: ${errBody}`);
+      } else if (response.status === 529) {
+        throw new Error(`Anthropic API overloaded (529). The API is temporarily at capacity — please try again in a few minutes.`);
+      }
+      throw new Error(`Anthropic API error (${response.status}): ${errBody}`);
+    }
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text;
+    if (!text) throw new Error("Empty response from Anthropic API. Try again or simplify the prompt.");
+    return parseJsonResponse(text);
   });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`Anthropic API error (${response.status}): ${errBody}`);
-  }
-
-  const data = await response.json();
-  const text = data.content?.[0]?.text;
-  if (!text) throw new Error("Empty response from Anthropic API");
-  return parseJsonResponse(text);
 }
 
 // ── NPC Builder ──────────────────────────────────────────────
@@ -314,70 +443,85 @@ export async function generateAINpc(options = {}) {
     game.i18n.localize("CORIOLIS_AIO.AINPC.Generating")
   );
 
-  let npcData;
+  // Show loading overlay
+  const overlay = document.createElement("div");
+  overlay.classList.add("coriolis-ai-loading-overlay");
+  overlay.innerHTML = `
+    <div class="coriolis-ai-spinner"></div>
+    <div class="coriolis-ai-loading-text">${game.i18n.localize("CORIOLIS_AIO.AINPC.GeneratingTitle")}</div>
+    <div class="coriolis-ai-loading-subtext">${game.i18n.localize("CORIOLIS_AIO.AINPC.GeneratingMessage")}</div>
+  `;
+  document.body.appendChild(overlay);
+
   try {
-    npcData = await providerDef.call(apiKey, prompt);
-  } catch (err) {
-    console.error(`${MODULE_ID} | AI NPC generation failed (${provider}):`, err);
-    ui.notifications.error(`AI generation failed: ${err.message}`);
-    return { actor: null, summary: `Error: ${err.message}` };
-  }
+    let npcData;
+    try {
+      npcData = await providerDef.call(apiKey, prompt);
+    } catch (err) {
+      console.error(`${MODULE_ID} | AI NPC generation failed (${provider}):`, err);
+      ui.notifications.error(`AI generation failed: ${err.message}`);
+      return { actor: null, summary: `Error: ${err.message}` };
+    }
 
-  npcData = sanitizeNPC(npcData);
+    npcData = sanitizeNPC(npcData);
 
-  // Enrich items via compendium
-  const items = await enrichItems(npcData.items || []);
+    // Enrich items via compendium
+    const items = await enrichItems(npcData.items || []);
 
-  const bio = npcData.bio || {};
-  const attrs = npcData.attributes;
-  const hpMax = attrs.strength + attrs.agility;
-  const mpMax = attrs.wits + attrs.empathy;
+    const bio = npcData.bio || {};
+    const attrs = npcData.attributes;
+    const hpMax = attrs.strength + attrs.agility;
+    const mpMax = attrs.wits + attrs.empathy;
 
-  // Build skill values
-  const skillsData = {};
-  for (const [key, val] of Object.entries(npcData.skills)) {
-    skillsData[key] = { value: val };
-  }
+    // Build skill values
+    const skillsData = {};
+    for (const [key, val] of Object.entries(npcData.skills)) {
+      skillsData[key] = { value: val };
+    }
 
-  const actorData = {
-    name: npcData.name || "Unnamed NPC",
-    type: "npc",
-    system: {
-      bio: {
-        origin: bio.origin || "",
-        upbringing: bio.upbringing || "",
-        humanite: false,
-        concept: bio.concept || "",
-        icon: bio.icon || "",
-        groupConcept: bio.groupConcept || "",
-        personalProblem: bio.personalProblem || "",
-        appearance: {
-          face: bio.appearance?.face || "",
-          clothing: bio.appearance?.clothing || ""
+    const actorData = {
+      name: npcData.name || "Unnamed NPC",
+      type: "npc",
+      system: {
+        bio: {
+          origin: bio.origin || "",
+          upbringing: bio.upbringing || "",
+          humanite: false,
+          concept: bio.concept || "",
+          icon: bio.icon || "",
+          groupConcept: bio.groupConcept || "",
+          personalProblem: bio.personalProblem || "",
+          appearance: {
+            face: bio.appearance?.face || "",
+            clothing: bio.appearance?.clothing || ""
+          },
+          crewPosition: { position: "", shipId: "" }
         },
-        crewPosition: { position: "", shipId: "" }
+        attributes: {
+          strength: { value: attrs.strength },
+          agility: { value: attrs.agility },
+          wits: { value: attrs.wits },
+          empathy: { value: attrs.empathy }
+        },
+        skills: skillsData,
+        hitPoints: { value: hpMax },
+        mindPoints: { value: mpMax },
+        experience: { value: 0 },
+        radiation: { value: 0 },
+        reputation: { value: npcData.reputation || 0 },
+        birr: npcData.birr || 0,
+        movementRate: 10,
+        notes: npcData.notes || `AI-generated NPC.\nPrompt: ${prompt}`
       },
-      attributes: {
-        strength: { value: attrs.strength },
-        agility: { value: attrs.agility },
-        wits: { value: attrs.wits },
-        empathy: { value: attrs.empathy }
-      },
-      skills: skillsData,
-      hitPoints: { value: hpMax },
-      mindPoints: { value: mpMax },
-      experience: { value: 0 },
-      radiation: { value: 0 },
-      reputation: { value: npcData.reputation || 0 },
-      birr: npcData.birr || 0,
-      movementRate: 10,
-      notes: npcData.notes || `AI-generated NPC.\nPrompt: ${prompt}`
-    },
-    items
-  };
+      items
+    };
 
-  const actor = await Actor.implementation.create(actorData);
-  const summary = `AI NPC: "${actor.name}" — ${bio.concept || "custom"}`;
-  ui.notifications.info(`AI NPC created: ${actor.name}`);
-  return { actor, summary };
+    const actor = await Actor.implementation.create(actorData);
+    const summary = `AI NPC: "${actor.name}" — ${bio.concept || "custom"}`;
+    ui.notifications.info(`AI NPC created: ${actor.name}`);
+    return { actor, summary };
+  } finally {
+    // Always remove the overlay
+    overlay.remove();
+  }
 }

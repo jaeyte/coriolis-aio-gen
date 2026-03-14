@@ -213,14 +213,30 @@ function _generatePartyFromForm(form) {
   });
 }
 
-function _generateNPCFromForm(form) {
-  return generateQuickNPC({
+async function _generateNPCFromForm(form) {
+  const count = Math.max(1, Math.min(10, parseInt(form.npcCount.value) || 1));
+  const baseOptions = {
     archetypeKey: form.npcArchetype.value || undefined,
     factionKey: form.npcFaction.value || undefined,
-    name: form.npcName.value || undefined,
     createActor: form.npcCreateActor.checked,
     includeMysticPowers: form.npcMysticPowers.checked
-  });
+  };
+
+  // If only one, use provided name (if any)
+  if (count === 1) {
+    return generateQuickNPC({ ...baseOptions, name: form.npcName.value || undefined });
+  }
+
+  // Batch: generate multiple NPCs (ignore custom name, each gets a random name)
+  const results = [];
+  for (let i = 0; i < count; i++) {
+    const result = await generateQuickNPC({ ...baseOptions });
+    results.push(result);
+  }
+
+  const summaries = results.map(r => r.summary).join("\n");
+  ui.notifications.info(`Batch complete: ${count} NPCs generated.`);
+  return { batch: results, summary: summaries };
 }
 
 function _generateMissionFromForm(form) {

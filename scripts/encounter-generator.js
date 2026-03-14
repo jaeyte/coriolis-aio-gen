@@ -108,6 +108,28 @@ async function createEnemyActor(enemyKey, difficultyTier, xpTier, nameOverride) 
     }
   }
 
+  // Ammunition for ranged weapons
+  const AMMO_MAP = {
+    vulcanCricket: { ammoKey: "vulcanAmmo", qty: 1 },
+    vulcanPistol:  { ammoKey: "vulcanAmmo", qty: 1 },
+    vulcanCarbine: { ammoKey: "vulcanAmmo", qty: 2 },
+    thermPistol:   { ammoKey: "thermCells", qty: 1 }
+  };
+  const ammoNeeded = {};
+  for (const wKey of template.weapons) {
+    const mapping = AMMO_MAP[wKey];
+    if (mapping) {
+      ammoNeeded[mapping.ammoKey] = (ammoNeeded[mapping.ammoKey] || 0) + mapping.qty;
+    }
+  }
+  for (const [ammoKey, qty] of Object.entries(ammoNeeded)) {
+    const ammoData = ENEMY_GEAR[ammoKey];
+    if (ammoData) {
+      const resolved = await resolveItem({ ...ammoData, system: { ...ammoData.system, quantity: qty } });
+      embeddedItems.push(resolved);
+    }
+  }
+
   // Armor
   if (template.armor) {
     const aData = ENEMY_ARMOR[template.armor];

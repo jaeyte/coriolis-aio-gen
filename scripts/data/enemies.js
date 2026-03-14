@@ -236,6 +236,7 @@ export const ENEMIES = {
     skills: { meleecombat: 2, infiltration: 2, survival: 1 },
     weapons: ["claws"],
     armor: null,
+    gear: [],
     talents: [],
     description: "A scuttling vermin that infests dark corners of stations and ships."
   },
@@ -335,7 +336,9 @@ export const ENEMY_GEAR = {
   computerTablet: { name: "Computer Tablet", type: "gear", system: { weight: "L", techTier: "O" } },
   binoculars:     { name: "Binoculars",      type: "gear", system: { weight: "L", techTier: "O" } },
   prayerBeads:    { name: "Prayer Beads",    type: "gear", system: { weight: "T", techTier: "P" } },
-  incense:        { name: "Ritual Incense",  type: "gear", system: { weight: "T", techTier: "P" } }
+  incense:        { name: "Ritual Incense",  type: "gear", system: { weight: "T", techTier: "P" } },
+  vulcanAmmo:     { name: "Vulcan Ammunition", type: "gear", system: { weight: "T", techTier: "O" } },
+  thermCells:     { name: "Therm Cells",       type: "gear", system: { weight: "T", techTier: "A" } }
 };
 
 export const ENEMY_FACTIONS = {

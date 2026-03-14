@@ -391,6 +391,12 @@
         </label>
         <p class="hint">{{localize "CORIOLIS_AIO.NPC.CreateActorHint"}}</p>
       </div>
+
+      <div class="form-group">
+        <label for="aio-npc-count">{{localize "CORIOLIS_AIO.NPC.Count"}}</label>
+        <input type="number" id="aio-npc-count" name="npcCount" value="1" min="1" max="10" />
+        <p class="hint">{{localize "CORIOLIS_AIO.NPC.CountHint"}}</p>
+      </div>
     </fieldset>
   </div>
 
@@ -494,7 +500,7 @@
 
       <div class="form-group">
         <label for="aio-ai-prompt">{{localize "CORIOLIS_AIO.AINPC.Prompt"}}</label>
-        <textarea id="aio-ai-prompt" name="aiNpcPrompt" rows="5" placeholder="{{localize "CORIOLIS_AIO.AINPC.PromptPlaceholder"}}"></textarea>
+        <textarea id="aio-ai-prompt" name="aiNpcPrompt" rows="5" maxlength="1000" placeholder="{{localize "CORIOLIS_AIO.AINPC.PromptPlaceholder"}}"></textarea>
         <p class="hint">{{localize "CORIOLIS_AIO.AINPC.PromptHint"}}</p>
       </div>
     </fieldset>

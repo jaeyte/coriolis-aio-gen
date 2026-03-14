@@ -371,3 +371,52 @@
 .coriolis-aio-gen-sidebar-btn i {
   margin-right: 5px;
 }
+
+/* ================================================================
+   AI GENERATION LOADING OVERLAY
+   ================================================================ */
+
+.coriolis-ai-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(11, 11, 26, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+}
+
+.coriolis-ai-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--coriolis-border, #2a2a52);
+  border-top-color: var(--coriolis-gold, #d4a84b);
+  border-radius: 50%;
+  animation: coriolis-spin 0.8s linear infinite;
+  margin-bottom: 16px;
+  box-shadow: 0 0 12px rgba(212, 168, 75, 0.3);
+}
+
+@keyframes coriolis-spin {
+  to { transform: rotate(360deg); }
+}
+
+.coriolis-ai-loading-text {
+  color: var(--coriolis-gold, #d4a84b);
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(212, 168, 75, 0.35);
+}
+
+.coriolis-ai-loading-subtext {
+  color: var(--coriolis-text-dim, #8888aa);
+  font-size: 0.78em;
+  font-style: italic;
+  margin-top: 6px;
+}

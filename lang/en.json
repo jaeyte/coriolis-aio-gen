@@ -73,9 +73,15 @@
   "CORIOLIS_AIO.AINPC.PromptHint": "Describe the NPC you want. The AI will generate a complete actor with stats, gear, talents, and background. Requires an API key configured in module settings.",
   "CORIOLIS_AIO.AINPC.NoApiKey": "No API key configured. Set it in Module Settings → Coriolis AIO Generator.",
   "CORIOLIS_AIO.AINPC.Generating": "Generating NPC with AI — this may take a few seconds...",
+  "CORIOLIS_AIO.AINPC.GeneratingTitle": "Consulting the Icons...",
+  "CORIOLIS_AIO.AINPC.GeneratingMessage": "The AI is forging your NPC from the dark between the stars.",
+  "CORIOLIS_AIO.NPC.Count": "Number of NPCs",
+  "CORIOLIS_AIO.NPC.CountHint": "Generate multiple NPCs at once (1-10). Each will get a unique random name.",
   "CORIOLIS_AIO.Settings.Provider": "AI Provider",
   "CORIOLIS_AIO.Settings.ProviderHint": "Which LLM to use. Gemini offers a generous free tier. OpenRouter has free models. Anthropic is paid but highest quality.",
   "CORIOLIS_AIO.Settings.ApiKey": "API Key",
   "CORIOLIS_AIO.Settings.ApiKeyHint": "API key for the selected provider. Gemini: aistudio.google.com/apikey — OpenRouter: openrouter.ai/keys — Anthropic: console.anthropic.com",
+  "CORIOLIS_AIO.Settings.Model": "AI Model (Optional)",
+  "CORIOLIS_AIO.Settings.ModelHint": "Manually override the AI model. Leave blank to use the provider's default.",
   "CORIOLIS_AIO.Error.GenerationFailed": "Generation failed. Check the console for details."
 }

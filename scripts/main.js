@@ -38,6 +38,15 @@ Hooks.once("init", () => {
     type: String,
     default: ""
   });
+
+  game.settings.register(MODULE_ID, "aiModel", {
+    name: "CORIOLIS_AIO.Settings.Model",
+    hint: "CORIOLIS_AIO.Settings.ModelHint",
+    scope: "world",
+    config: true,
+    type: String,
+    default: ""
+  });
 });
 
 Hooks.once("ready", () => {

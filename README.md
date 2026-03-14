@@ -19,10 +19,10 @@ A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) tha
 
 1. Install the module (see [Installation](#installation))
 2. Enable it in your world's Module Management
-3. An **AIO Generator** macro is automatically added to your hotbar on first load — click it to open the generator
+3. Click the **AIO Generator** button in the **Actors** sidebar header to open the generator
 4. Pick a tab, configure options, and click **Generate**
 
-The generator can also be opened via the Actors sidebar header controls dropdown, or from a script macro: `game.modules.get("coriolis-aio-gen").api.openDialog()`.
+The generator can also be opened from a script macro: `game.modules.get("coriolis-aio-gen").api.openDialog()`.
 
 For the **AI NPC** tab, configure an API key in **Module Settings > Coriolis AIO Generator** first.
 
@@ -81,7 +81,7 @@ Creates scaled combat encounters with enemy actors and loot:
 
 Creates ship actors with functional modules and weapons:
 
-- **9 ship classes** — Courier, Patrol Boat, Bulk Hauler, Armed Merchant, Exploration Vessel, Colony Ship, Warship, Luxury Yacht, Colony Ship
+- **9 ship classes** — Light Freighter, Courier, Patrol Boat, Bulk Hauler, Armed Merchant, Exploration Vessel, Warship, Luxury Yacht, Colony Ship
 - **18+ ship modules** including 6 weapon types with full combat stats (damage, range, crit, bonus)
 - Stats rolled from class ranges: hull points, armor, speed, maneuverability, signature
 - Optional **ship quirk/problem** for narrative flavor
@@ -148,11 +148,11 @@ Creates complete NPC actors from a free-text description using an LLM:
 
 ### Supported Providers
 
-| Provider | Cost | Model |
+| Provider | Cost | Default Model |
 |---|---|---|
-| **Google Gemini** | Free tier (15 RPM, 1M tokens/day) | gemini-2.0-flash |
-| **OpenRouter** | Free models available | google/gemini-2.0-flash-exp:free |
-| **Anthropic** | Paid | claude-sonnet-4-20250514 |
+| **Google Gemini** | Free tier (10 RPM, 250 RPD) | `gemini-2.5-flash` |
+| **OpenRouter** | Free models available | `google/gemini-2.5-flash:free` |
+| **Anthropic** | Paid | `claude-sonnet-4-6` |
 
 ### Setup
 
