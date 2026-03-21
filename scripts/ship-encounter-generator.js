@@ -13,9 +13,10 @@ import {
   CREW_TEMPLATES,
   FACTION_SHIP_NAMES
 } from "./data/ship-encounters.js";
-import { DIFFICULTY_TIERS, getXPTier } from "./data/enemies.js";
+import { DIFFICULTY_TIERS, ENEMY_WEAPONS, ENEMY_ARMOR, ENEMY_GEAR, getXPTier } from "./data/enemies.js";
 import { LOOT_TABLES, LOOT_TIERS, TIER_ORDER, filterByTier, weightedPick } from "./data/loot.js";
 import { resolveShipModule, generateShipName } from "./ship-generator.js";
+import { resolveItem, resolveTalent } from "./compendium-resolver.js";
 import { generateName } from "./data/names.js";
 
 // ── Utility ──────────────────────────────────────────────────
@@ -159,7 +160,7 @@ async function createEnemyShip(shipKey, difficultyTier, xpTier) {
     const crewTemplate = CREW_TEMPLATES[roleKey];
     if (!crewTemplate) continue;
 
-    const crewActor = await createCrewNPC(crewTemplate, template, difficultyTier, xpTier, name);
+    const crewActor = await createCrewNPC(crewTemplate, template, difficultyTier, xpTier, name, shipActor.id);
     if (crewActor) crewActors.push(crewActor);
   }
 
@@ -168,8 +169,14 @@ async function createEnemyShip(shipKey, difficultyTier, xpTier) {
 
 /**
  * Create a key crew NPC for an enemy ship.
+ *
+ * @param {object} crewTemplate - Crew role template from CREW_TEMPLATES
+ * @param {object} shipTemplate - Enemy ship template from ENEMY_SHIPS
+ * @param {object} difficultyTier - Difficulty settings
+ * @param {object} xpTier - XP-based scaling
+ * @param {string} shipName - Name of the ship this NPC serves on
  */
-async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier) {
+async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier, shipName, shipId = "") {
   const scale = difficultyTier.statScale;
   const bonus = xpTier.statBonus;
 
@@ -188,6 +195,71 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier)
   const mpMax = attributes.wits + attributes.empathy;
   const crewName = `${crewTemplate.role} (${generateName().split(" ")[0]})`;
 
+  // Resolve embedded items (weapons, armor, gear, talents)
+  const embeddedItems = [];
+
+  // Weapons
+  if (crewTemplate.weapons) {
+    for (const wKey of crewTemplate.weapons) {
+      const wData = ENEMY_WEAPONS[wKey];
+      if (wData) {
+        const resolved = await resolveItem({ ...wData });
+        embeddedItems.push(resolved);
+      }
+    }
+
+    // Ammunition for ranged weapons
+    const AMMO_MAP = {
+      vulcanCricket: { ammoKey: "vulcanAmmo", qty: 1 },
+      vulcanPistol:  { ammoKey: "vulcanAmmo", qty: 1 },
+      vulcanCarbine: { ammoKey: "vulcanAmmo", qty: 2 },
+      thermPistol:   { ammoKey: "thermCells", qty: 1 },
+      thermRifle:    { ammoKey: "thermCells", qty: 2 }
+    };
+    const ammoNeeded = {};
+    for (const wKey of crewTemplate.weapons) {
+      const mapping = AMMO_MAP[wKey];
+      if (mapping) {
+        ammoNeeded[mapping.ammoKey] = (ammoNeeded[mapping.ammoKey] || 0) + mapping.qty;
+      }
+    }
+    for (const [ammoKey, qty] of Object.entries(ammoNeeded)) {
+      const ammoData = ENEMY_GEAR[ammoKey];
+      if (ammoData) {
+        const resolved = await resolveItem({ ...ammoData, system: { ...ammoData.system, quantity: qty } });
+        embeddedItems.push(resolved);
+      }
+    }
+  }
+
+  // Armor
+  if (crewTemplate.armor) {
+    const aData = ENEMY_ARMOR[crewTemplate.armor];
+    if (aData) {
+      const resolved = await resolveItem({ ...aData });
+      embeddedItems.push(resolved);
+    }
+  }
+
+  // Gear
+  if (crewTemplate.gear) {
+    for (const gKey of crewTemplate.gear) {
+      const gData = ENEMY_GEAR[gKey];
+      if (gData) {
+        const resolved = await resolveItem({ ...gData });
+        embeddedItems.push(resolved);
+      }
+    }
+  }
+
+  // Talents
+  if (crewTemplate.talents) {
+    for (const tKey of crewTemplate.talents) {
+      const talentItem = await resolveTalent(tKey);
+      if (talentItem) embeddedItems.push(talentItem);
+    }
+  }
+
   const actorData = {
     name: crewName,
     type: "npc",
@@ -201,7 +273,7 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier)
         groupConcept: "",
         personalProblem: "",
         appearance: { face: "", clothing: "" },
-        crewPosition: { position: crewTemplate.role.toLowerCase(), shipId: "" }
+        crewPosition: { position: crewTemplate.role.toLowerCase(), shipId }
       },
       attributes: {
         strength: { value: attributes.strength },
@@ -210,16 +282,16 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier)
         empathy: { value: attributes.empathy }
       },
       skills,
-      hitPoints: { value: hpMax },
-      mindPoints: { value: mpMax },
+      hitPoints: { value: hpMax, max: hpMax },
+      mindPoints: { value: mpMax, max: mpMax },
       experience: { value: 0 },
       radiation: { value: 0 },
       reputation: { value: 0 },
       birr: 0,
       movementRate: 10,
-      notes: `${crewTemplate.role} aboard a ${shipTemplate.name}.\nFaction: ${shipTemplate.faction}\n\nDifficulty-scaled by Coriolis AIO Generator.`
+      notes: `${crewTemplate.role} aboard ${shipName || shipTemplate.name}.\nFaction: ${shipTemplate.faction}\n\nDifficulty-scaled by Coriolis AIO Generator.`
     },
-    items: []
+    items: embeddedItems
   };
 
   return Actor.implementation.create(actorData);
@@ -442,5 +514,5 @@ export async function generateShipEncounter(options = {}) {
 
   ui.notifications.info(`Ship encounter generated: ${template.label} — ${shipActors.length} ships, ${crewActors.length} crew.`);
 
-  return { shipActors, crewActors, journal, summary };
+  return { shipActors, crewActors, journal, summary, templateKey };
 }

@@ -224,32 +224,56 @@ export const CREW_TEMPLATES = {
   captain: {
     role: "Captain",
     attributes: { strength: 3, agility: 3, wits: 4, empathy: 4 },
-    skills: { command: 3, manipulation: 2, rangedcombat: 2, observation: 2, pilot: 1 }
+    skills: { command: 3, manipulation: 2, rangedcombat: 2, observation: 2, pilot: 1 },
+    weapons: ["vulcanPistol", "knife"],
+    armor: "lightVest",
+    gear: ["communicator"],
+    talents: ["combatveteran"]
   },
   pilot: {
     role: "Pilot",
     attributes: { strength: 2, agility: 4, wits: 4, empathy: 2 },
-    skills: { pilot: 3, observation: 2, technology: 1, rangedcombat: 1 }
+    skills: { pilot: 3, observation: 2, technology: 1, rangedcombat: 1 },
+    weapons: ["vulcanCricket"],
+    armor: null,
+    gear: ["communicator"],
+    talents: ["nimble"]
   },
   gunner: {
     role: "Gunner",
     attributes: { strength: 3, agility: 4, wits: 3, empathy: 2 },
-    skills: { rangedcombat: 3, observation: 2, technology: 1, pilot: 1 }
+    skills: { rangedcombat: 3, observation: 2, technology: 1, pilot: 1 },
+    weapons: ["vulcanCarbine", "knife"],
+    armor: "lightVest",
+    gear: ["communicator"],
+    talents: ["combatveteran"]
   },
   engineer: {
     role: "Engineer",
     attributes: { strength: 3, agility: 3, wits: 4, empathy: 2 },
-    skills: { technology: 3, science: 1, force: 2, observation: 1 }
+    skills: { technology: 3, science: 1, force: 2, observation: 1 },
+    weapons: ["knife"],
+    armor: null,
+    gear: ["communicator", "medkit"],
+    talents: ["mechanic"]
   },
   sensorOperator: {
     role: "Sensor Operator",
     attributes: { strength: 2, agility: 3, wits: 4, empathy: 3 },
-    skills: { datadjinn: 3, observation: 2, technology: 2, science: 1 }
+    skills: { datadjinn: 3, observation: 2, technology: 2, science: 1 },
+    weapons: ["vulcanCricket"],
+    armor: null,
+    gear: ["communicator", "computerTablet"],
+    talents: ["hacker"]
   },
   medic: {
     role: "Medic",
     attributes: { strength: 2, agility: 3, wits: 4, empathy: 4 },
-    skills: { medicurgy: 3, observation: 2, science: 1 }
+    skills: { medicurgy: 3, observation: 2, science: 1 },
+    weapons: ["knife"],
+    armor: null,
+    gear: ["communicator", "medkit"],
+    talents: ["fieldmedicurg"]
   }
 };
 

@@ -79,9 +79,9 @@
   "CORIOLIS_AIO.NPC.Count": "Number of NPCs",
   "CORIOLIS_AIO.NPC.CountHint": "Generate multiple NPCs at once (1-10). Each will get a unique random name.",
   "CORIOLIS_AIO.Settings.Provider": "AI Provider",
-  "CORIOLIS_AIO.Settings.ProviderHint": "Which LLM to use. Gemini offers a generous free tier. OpenRouter has free models. Anthropic is paid but highest quality.",
+  "CORIOLIS_AIO.Settings.ProviderHint": "Which LLM to use. Groq offers a fast free tier. Gemini offers a generous free tier. OpenRouter has free models. Anthropic is paid but highest quality.",
   "CORIOLIS_AIO.Settings.ApiKey": "API Key",
-  "CORIOLIS_AIO.Settings.ApiKeyHint": "API key for the selected provider. Gemini: aistudio.google.com/apikey — OpenRouter: openrouter.ai/keys — Anthropic: console.anthropic.com",
+  "CORIOLIS_AIO.Settings.ApiKeyHint": "API key for the selected provider. Groq: console.groq.com — Gemini: aistudio.google.com/apikey — OpenRouter: openrouter.ai/keys — Anthropic: console.anthropic.com",
   "CORIOLIS_AIO.Settings.Model": "AI Model (Optional)",
   "CORIOLIS_AIO.Settings.ModelHint": "Manually override the AI model. Leave blank to use the provider's default.",
   "CORIOLIS_AIO.Error.GenerationFailed": "Generation failed. Check the console for details."
