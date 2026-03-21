@@ -370,7 +370,7 @@ export const STARTING_GEAR = {
   },
   scout: {
     weapons: [
-      { name: "Vulcan Carbine", type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "O", bonus: 2, initiative: -2 } }
+      { name: "Vulcan Carbine", type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "O", bonus: 2, initiative: -2, automatic: true } }
     ],
     armor: [],
     gear: [

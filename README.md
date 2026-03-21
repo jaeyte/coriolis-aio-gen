@@ -12,7 +12,7 @@ A Foundry VTT v13 module for **Coriolis: The Third Horizon** (`yzecoriolis`) tha
 | **Ship Encounter** | Enemy ship + crew actors | 10 enemy ships, 9 templates, salvage loot, boarding party linking |
 | **Party** | 3–6 characters in a folder | Crew position assignment via concept affinity matching |
 | **Quick NPC** | Actor or journal entry | 10 archetypes, 10 factions, personality/motivation/quirk, gear loadouts, mystic powers |
-| **AI NPC** | Full NPC actor | Free-text prompt to complete actor via LLM (Gemini, OpenRouter, or Anthropic) |
+| **AI NPC** | Full NPC actor | Free-text prompt to complete actor via LLM (Groq, Gemini, OpenRouter, or Anthropic) |
 | **Mission** | Journal briefing + NPCs | 10 templates, patron/antagonist NPCs, linked encounters, reward scaling |
 
 ## Getting Started
@@ -107,7 +107,7 @@ Creates space combat encounters with enemy ships and crew:
 - **10 enemy ship templates** — Pirate Skiff, Corsair Flagship, Legion Cutter, Smuggler Runner, Darkbound Hulk, and more
 - **9 encounter templates** — Pirate Ambush, Corsair Fleet, Legion Intercept, Mercenary Ambush, Ghost Ship, and more
 - **4 ship categories** — Fodder (0.7x hull), Standard (1.0x), Heavy (1.3x), Flagship (1.6x)
-- **Key crew NPCs** generated per ship (captain, pilot, gunner, engineer, etc.)
+- **Key crew NPCs** generated per ship with weapons, armor, gear, and talents (captain, pilot, gunner, engineer, etc.)
 - **Salvage loot** journal generation from defeated ships
 - **Boarding party linking** — auto-generate a linked personal combat encounter
 
@@ -150,6 +150,7 @@ Creates complete NPC actors from a free-text description using an LLM:
 
 | Provider | Cost | Default Model |
 |---|---|---|
+| **Groq** | Free tier (30 RPM, 14,400 RPD) | `llama-3.3-70b-versatile` |
 | **Google Gemini** | Free tier (10 RPM, 250 RPD) | `gemini-2.5-flash` |
 | **OpenRouter** | Free models available | `google/gemini-2.5-flash:free` |
 | **Anthropic** | Paid | `claude-sonnet-4-6` |
@@ -157,8 +158,9 @@ Creates complete NPC actors from a free-text description using an LLM:
 ### Setup
 
 1. Go to **Module Settings > Coriolis AIO Generator**
-2. Select your **AI Provider**
+2. Select your **AI Provider** (Groq is the default)
 3. Enter your **API Key**:
+   - Groq: [console.groq.com](https://console.groq.com)
    - Gemini: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
    - OpenRouter: [openrouter.ai/keys](https://openrouter.ai/keys)
    - Anthropic: [console.anthropic.com](https://console.anthropic.com)
@@ -257,6 +259,25 @@ coriolis-aio-gen/
 └── lang/
     └── en.json                      # English localization
 ```
+
+## Changelog
+
+### v3.2.0
+- **Groq AI provider** — added as default AI provider with free tier support (`llama-3.3-70b-versatile`)
+- **Combat-ready ship crew NPCs** — crew members now spawn with weapons, armor, gear, and talents
+- **HP/MP token bar fix** — all generators now set `max` field on hitPoints/mindPoints for working token bars
+- **Linked encounter fix** — random template selection no longer silently skips linked ship/boarding encounters
+- **Loot table fixes** — corrected weapon stats (Thermal Carbine, Accelerator Pistol ranges) and added missing bonus/initiative fields
+- **Ammo coverage** — added thermRifle to all AMMO_MAPs for consistent ammunition generation
+- **Scout Vulcan Carbine** — added missing `automatic: true` flag
+- **Mystic power names** — fixed "Mind Walker" display name in journal output
+
+### v3.1.0
+- Bump version; fix grenade type for compendium lookup
+
+### v3.0.0
+- NPC difficulty scaling and weapon range tiers
+- Major content expansion
 
 ## License
 

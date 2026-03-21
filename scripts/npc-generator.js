@@ -349,10 +349,14 @@ export async function generateQuickNPC(options = {}) {
     if (includeMysticPowers && archetype.mysticPowers) {
       const count = randRange(1, 2);
       const selected = pickMultiple(MYSTIC_POWER_KEYS, count);
-      const names = selected.map(k => {
-        const word = k.replace("mystical", "");
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      });
+      const MYSTIC_POWER_NAMES = {
+        mysticalclairvoyant: "Clairvoyant",
+        mysticaltelekinesis: "Telekinesis",
+        mysticaltelepathy: "Telepathy",
+        mysticalpremonition: "Premonition",
+        mysticalmindwalker: "Mind Walker"
+      };
+      const names = selected.map(k => MYSTIC_POWER_NAMES[k] || k);
       html += `<p><strong>Mystic Powers:</strong> ${names.join(", ")}</p>`;
     }
 

@@ -17,14 +17,14 @@ export const LOOT_TIERS = {
  */
 export const LOOT_TABLES = {
   weapons: [
-    { name: "Knife",              weight: 10, minTier: "basic",    item: { type: "weapon", system: { damage: 1, range: "contact", melee: true, weight: "L", techTier: "P" } } },
-    { name: "Club",               weight: 8,  minTier: "basic",    item: { type: "weapon", system: { damage: 2, range: "contact", melee: true, weight: "N", techTier: "P" } } },
-    { name: "Vulcan Cricket",     weight: 7,  minTier: "basic",    item: { type: "weapon", system: { damage: 2, range: "short", melee: false, weight: "L", techTier: "O" } } },
-    { name: "Vulcan Pistol",      weight: 6,  minTier: "standard", item: { type: "weapon", system: { damage: 2, range: "short", melee: false, weight: "L", techTier: "O", bonus: 1 } } },
-    { name: "Saber",              weight: 4,  minTier: "standard", item: { type: "weapon", system: { damage: 2, range: "contact", melee: true, weight: "N", techTier: "O", bonus: 1 } } },
-    { name: "Vulcan Carbine",     weight: 3,  minTier: "advanced", item: { type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "O", bonus: 2, automatic: true } } },
-    { name: "Thermal Cricket",    weight: 2,  minTier: "advanced", item: { type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "A", bonus: 2 } } },
-    { name: "Accelerator Pistol", weight: 1,  minTier: "elite",    item: { type: "weapon", system: { damage: 3, range: "medium", melee: false, weight: "L", techTier: "A", bonus: 2 } } }
+    { name: "Knife",              weight: 10, minTier: "basic",    item: { type: "weapon", system: { damage: 1, range: "contact", melee: true, weight: "L", techTier: "P", bonus: 0, initiative: 1 } } },
+    { name: "Club",               weight: 8,  minTier: "basic",    item: { type: "weapon", system: { damage: 2, range: "contact", melee: true, weight: "N", techTier: "P", bonus: 0, initiative: 0 } } },
+    { name: "Vulcan Cricket",     weight: 7,  minTier: "basic",    item: { type: "weapon", system: { damage: 2, range: "short", melee: false, weight: "L", techTier: "O", bonus: 1, initiative: 0 } } },
+    { name: "Vulcan Pistol",      weight: 6,  minTier: "standard", item: { type: "weapon", system: { damage: 2, range: "short", melee: false, weight: "L", techTier: "O", bonus: 1, initiative: 0 } } },
+    { name: "Saber",              weight: 4,  minTier: "standard", item: { type: "weapon", system: { damage: 2, range: "contact", melee: true, weight: "N", techTier: "O", bonus: 1, initiative: 1 } } },
+    { name: "Vulcan Carbine",     weight: 3,  minTier: "advanced", item: { type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "O", bonus: 2, initiative: -2, automatic: true } } },
+    { name: "Thermal Carbine",    weight: 2,  minTier: "advanced", item: { type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "N", techTier: "A", bonus: 2, initiative: -2 } } },
+    { name: "Accelerator Pistol", weight: 1,  minTier: "elite",    item: { type: "weapon", system: { damage: 3, range: "long", melee: false, weight: "L", techTier: "A", bonus: 2, initiative: 0 } } }
   ],
 
   armor: [

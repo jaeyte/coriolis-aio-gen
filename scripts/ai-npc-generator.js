@@ -5,6 +5,7 @@
  * NPC actor with attributes, skills, talents, gear, and narrative details.
  *
  * Supports multiple providers:
+ *  - Groq (free tier — default)
  *  - Google Gemini (free tier)
  *  - OpenRouter (free models available)
  *  - Anthropic (paid)
