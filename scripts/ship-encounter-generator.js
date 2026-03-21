@@ -168,8 +168,14 @@ async function createEnemyShip(shipKey, difficultyTier, xpTier) {
 
 /**
  * Create a key crew NPC for an enemy ship.
+ *
+ * @param {object} crewTemplate - Crew role template from CREW_TEMPLATES
+ * @param {object} shipTemplate - Enemy ship template from ENEMY_SHIPS
+ * @param {object} difficultyTier - Difficulty settings
+ * @param {object} xpTier - XP-based scaling
+ * @param {string} shipName - Name of the ship this NPC serves on
  */
-async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier) {
+async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier, shipName) {
   const scale = difficultyTier.statScale;
   const bonus = xpTier.statBonus;
 
@@ -210,14 +216,14 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier)
         empathy: { value: attributes.empathy }
       },
       skills,
-      hitPoints: { value: hpMax },
-      mindPoints: { value: mpMax },
+      hitPoints: { value: hpMax, max: hpMax },
+      mindPoints: { value: mpMax, max: mpMax },
       experience: { value: 0 },
       radiation: { value: 0 },
       reputation: { value: 0 },
       birr: 0,
       movementRate: 10,
-      notes: `${crewTemplate.role} aboard a ${shipTemplate.name}.\nFaction: ${shipTemplate.faction}\n\nDifficulty-scaled by Coriolis AIO Generator.`
+      notes: `${crewTemplate.role} aboard ${shipName || shipTemplate.name}.\nFaction: ${shipTemplate.faction}\n\nDifficulty-scaled by Coriolis AIO Generator.`
     },
     items: []
   };
@@ -442,5 +448,5 @@ export async function generateShipEncounter(options = {}) {
 
   ui.notifications.info(`Ship encounter generated: ${template.label} — ${shipActors.length} ships, ${crewActors.length} crew.`);
 
-  return { shipActors, crewActors, journal, summary };
+  return { shipActors, crewActors, journal, summary, templateKey };
 }

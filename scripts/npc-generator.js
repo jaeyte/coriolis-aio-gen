@@ -306,8 +306,8 @@ export async function generateQuickNPC(options = {}) {
           empathy: { value: attributes.empathy }
         },
         skills,
-        hitPoints: { value: hpMax },
-        mindPoints: { value: mpMax },
+        hitPoints: { value: hpMax, max: hpMax },
+        mindPoints: { value: mpMax, max: mpMax },
         experience: { value: 0 },
         radiation: { value: 0 },
         reputation: { value: randRange(scale.rep[0], scale.rep[1]) },

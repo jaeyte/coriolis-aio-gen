@@ -504,8 +504,8 @@ export async function generateAINpc(options = {}) {
           empathy: { value: attrs.empathy }
         },
         skills: skillsData,
-        hitPoints: { value: hpMax },
-        mindPoints: { value: mpMax },
+        hitPoints: { value: hpMax, max: hpMax },
+        mindPoints: { value: mpMax, max: mpMax },
         experience: { value: 0 },
         radiation: { value: 0 },
         reputation: { value: npcData.reputation || 0 },

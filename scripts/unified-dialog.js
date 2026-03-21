@@ -149,9 +149,11 @@ async function _generateEncounterFromForm(form) {
     generateLoot: form.generateLoot.checked
   });
 
-  // Optionally generate the linked enemy ship
-  if (form.generateEnemyShip.checked && templateKey) {
-    const template = ENCOUNTER_TEMPLATES[templateKey];
+  // Optionally generate the linked enemy ship.
+  // Use the templateKey from the result (which reflects the actual template used,
+  // even when the form value was "Random").
+  if (form.generateEnemyShip.checked && result.templateKey) {
+    const template = ENCOUNTER_TEMPLATES[result.templateKey];
     if (template?.linkedShipEncounter) {
       await generateShipEncounter({
         templateKey: template.linkedShipEncounter,
@@ -188,9 +190,11 @@ async function _generateShipEncounterFromForm(form) {
     generateSalvage: form.generateSalvage.checked
   });
 
-  // Optionally generate the linked boarding party encounter
-  if (form.generateBoardingParty.checked && templateKey) {
-    const template = SHIP_ENCOUNTER_TEMPLATES[templateKey];
+  // Optionally generate the linked boarding party encounter.
+  // Use the templateKey from the result (which reflects the actual template used,
+  // even when the form value was "Random").
+  if (form.generateBoardingParty.checked && result.templateKey) {
+    const template = SHIP_ENCOUNTER_TEMPLATES[result.templateKey];
     if (template?.linkedEncounter) {
       await generateEncounter({
         templateKey: template.linkedEncounter,

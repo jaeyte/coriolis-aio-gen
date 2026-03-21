@@ -179,8 +179,8 @@ async function createEnemyActor(enemyKey, difficultyTier, xpTier, nameOverride) 
         empathy: { value: attributes.empathy }
       },
       skills: fullSkills,
-      hitPoints: { value: hpMax },
-      mindPoints: { value: mpMax },
+      hitPoints: { value: hpMax, max: hpMax },
+      mindPoints: { value: mpMax, max: mpMax },
       experience: { value: 0 },
       radiation: { value: 0 },
       reputation: { value: 0 },
@@ -372,5 +372,5 @@ export async function generateEncounter(options = {}) {
 
   ui.notifications.info(`Encounter generated: ${template.label} — ${actors.length} enemies created.`);
 
-  return { actors, journal, summary };
+  return { actors, journal, summary, templateKey };
 }

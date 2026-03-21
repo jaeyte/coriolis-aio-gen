@@ -248,6 +248,7 @@ export const ENEMIES = {
     skills: { meleecombat: 3, observation: 3, survival: 2 },
     weapons: ["bite"],
     armor: "thickHide",
+    gear: [],
     talents: ["catlike"],
     description: "A powerful hunting beast with keen senses and vicious jaws."
   },
@@ -259,6 +260,7 @@ export const ENEMIES = {
     skills: { meleecombat: 4, force: 4, survival: 3 },
     weapons: ["crushingJaws"],
     armor: "thickHide",
+    gear: [],
     talents: ["tough", "ninelives"],
     description: "A massive predator from the jungles of Kua, capable of crushing a man in its jaws."
   },
