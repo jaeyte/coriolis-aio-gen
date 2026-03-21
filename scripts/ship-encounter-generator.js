@@ -160,7 +160,7 @@ async function createEnemyShip(shipKey, difficultyTier, xpTier) {
     const crewTemplate = CREW_TEMPLATES[roleKey];
     if (!crewTemplate) continue;
 
-    const crewActor = await createCrewNPC(crewTemplate, template, difficultyTier, xpTier, name);
+    const crewActor = await createCrewNPC(crewTemplate, template, difficultyTier, xpTier, name, shipActor.id);
     if (crewActor) crewActors.push(crewActor);
   }
 
@@ -176,7 +176,7 @@ async function createEnemyShip(shipKey, difficultyTier, xpTier) {
  * @param {object} xpTier - XP-based scaling
  * @param {string} shipName - Name of the ship this NPC serves on
  */
-async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier, shipName) {
+async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier, shipName, shipId = "") {
   const scale = difficultyTier.statScale;
   const bonus = xpTier.statBonus;
 
@@ -213,7 +213,8 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier,
       vulcanCricket: { ammoKey: "vulcanAmmo", qty: 1 },
       vulcanPistol:  { ammoKey: "vulcanAmmo", qty: 1 },
       vulcanCarbine: { ammoKey: "vulcanAmmo", qty: 2 },
-      thermPistol:   { ammoKey: "thermCells", qty: 1 }
+      thermPistol:   { ammoKey: "thermCells", qty: 1 },
+      thermRifle:    { ammoKey: "thermCells", qty: 2 }
     };
     const ammoNeeded = {};
     for (const wKey of crewTemplate.weapons) {
@@ -272,7 +273,7 @@ async function createCrewNPC(crewTemplate, shipTemplate, difficultyTier, xpTier,
         groupConcept: "",
         personalProblem: "",
         appearance: { face: "", clothing: "" },
-        crewPosition: { position: crewTemplate.role.toLowerCase(), shipId: "" }
+        crewPosition: { position: crewTemplate.role.toLowerCase(), shipId }
       },
       attributes: {
         strength: { value: attributes.strength },

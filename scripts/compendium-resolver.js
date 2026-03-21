@@ -23,8 +23,8 @@ function getItemPacks() {
     if (pack.metadata.type !== "Item") continue;
     _packCache.push({
       pack,
-      priority: pack.metadata.packageName === "coriolis-corerules" ? 0
-        : pack.metadata.packageName === "yzecoriolis" ? 1
+      priority: (pack.metadata.packageName ?? pack.metadata.package) === "coriolis-corerules" ? 0
+        : (pack.metadata.packageName ?? pack.metadata.package) === "yzecoriolis" ? 1
         : 2
     });
   }

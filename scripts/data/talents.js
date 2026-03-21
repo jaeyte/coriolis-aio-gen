@@ -136,7 +136,7 @@ export const TALENTS = {
     description: "You are quick and agile. +2 to Pilot when performing evasive maneuvers."
   },
   toughpilot: {
-    name: "Tough",
+    name: "Zero-G Tough",
     category: "general",
     description: "You can withstand extreme G-forces. +2 to Force when resisting G-force effects."
   },

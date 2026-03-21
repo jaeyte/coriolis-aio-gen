@@ -90,7 +90,7 @@ async function createEnemyActor(enemyKey, difficultyTier, xpTier, nameOverride) 
   }
 
   // HP/MP
-  const hpMax = Math.round((attributes.strength + attributes.agility) * category.hpMultiplier);
+  const hpMax = Math.max(1, Math.round((attributes.strength + attributes.agility) * category.hpMultiplier));
   const mpMax = attributes.wits + attributes.empathy;
 
   // Name
@@ -113,7 +113,8 @@ async function createEnemyActor(enemyKey, difficultyTier, xpTier, nameOverride) 
     vulcanCricket: { ammoKey: "vulcanAmmo", qty: 1 },
     vulcanPistol:  { ammoKey: "vulcanAmmo", qty: 1 },
     vulcanCarbine: { ammoKey: "vulcanAmmo", qty: 2 },
-    thermPistol:   { ammoKey: "thermCells", qty: 1 }
+    thermPistol:   { ammoKey: "thermCells", qty: 1 },
+    thermRifle:    { ammoKey: "thermCells", qty: 2 }
   };
   const ammoNeeded = {};
   for (const wKey of template.weapons) {
