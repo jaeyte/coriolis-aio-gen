@@ -22,8 +22,9 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
-    default: "gemini",
+    default: "groq",
     choices: {
+      groq: "Groq (free tier)",
       gemini: "Google Gemini (free tier)",
       openrouter: "OpenRouter (free models)",
       anthropic: "Anthropic Claude (paid)"

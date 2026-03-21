@@ -92,6 +92,7 @@ Respond with ONLY valid JSON matching this exact structure (no markdown, no expl
 // ── Default models per provider ─────────────────────────────
 
 const DEFAULT_MODELS = {
+  groq: "llama-3.3-70b-versatile",
   gemini: "gemini-2.5-flash",
   openrouter: "google/gemini-2.5-flash:free",
   anthropic: "claude-sonnet-4-6"
@@ -100,6 +101,10 @@ const DEFAULT_MODELS = {
 // ── Provider Definitions ─────────────────────────────────────
 
 const PROVIDERS = {
+  groq: {
+    label: "Groq (free tier)",
+    call: callGroqAPI
+  },
   gemini: {
     label: "Google Gemini (free tier)",
     call: callGeminiAPI
@@ -179,6 +184,55 @@ async function withRetry(fn, { maxRetries = 2, baseDelayMs = 3000 } = {}) {
 }
 
 // ── API Callers ──────────────────────────────────────────────
+
+/**
+ * Groq — free tier: 30 RPM, 14400 RPD.
+ * Uses the OpenAI-compatible chat completions endpoint.
+ */
+async function callGroqAPI(apiKey, userPrompt) {
+  const model = getModel("groq");
+  return withRetry(async () => {
+    let response;
+    try {
+      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userPrompt }
+          ],
+          max_tokens: 2048,
+          temperature: 0.8,
+          response_format: { type: "json_object" }
+        })
+      });
+    } catch (networkErr) {
+      throw new Error(`Network error connecting to Groq API: ${networkErr.message}. Check your internet connection.`);
+    }
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      if (response.status === 401) {
+        throw new Error(`Groq API error (401 Unauthorized): Invalid API key. Get one at console.groq.com. Details: ${errBody}`);
+      } else if (response.status === 429) {
+        throw new Error(`Groq API rate limit reached (429). Free tier allows 30 requests/min and 14400 requests/day. Retrying...`);
+      } else if (response.status === 404) {
+        throw new Error(`Groq API error (404): Model '${model}' not found. Check the model name in module settings. Details: ${errBody}`);
+      }
+      throw new Error(`Groq API error (${response.status}): ${errBody}`);
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content;
+    if (!text) throw new Error("Empty response from Groq API. The model may not have produced valid output — try again.");
+    return parseJsonResponse(text);
+  });
+}
 
 /**
  * Google Gemini — free tier: 10 RPM, 250 RPD, 250k TPM.
